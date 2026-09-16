@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { StarIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
 import { motion } from "framer-motion";
 
@@ -53,6 +54,7 @@ export function ReviewForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
+    toast.success("Review submitted successfully!");
   };
 
   if (isSubmitted) {
@@ -157,13 +159,10 @@ export function ReviewForm({
               accept="image/png, image/jpeg" 
               onChange={handleChange} 
             />
-            {file && preview ? (
-              <div className="relative w-full h-40 rounded-lg overflow-hidden group">
-                <img src={preview} alt="Upload preview" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                  <p className="text-white text-sm font-medium">Click to change</p>
-                  <p className="text-xs text-red-300 cursor-pointer hover:text-red-400 hover:underline" onClick={(e) => { e.stopPropagation(); setFile(null); }}>Remove photo</p>
-                </div>
+            {file ? (
+              <div className="flex flex-col items-center gap-2 text-center">
+                <UploadIcon className="w-8 h-8 text-primary transition-colors" />
+                <p className="text-sm text-foreground/80 font-medium break-all px-4">{file.name}</p>
               </div>
             ) : (
               <>

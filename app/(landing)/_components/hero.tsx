@@ -32,13 +32,7 @@ export function Hero() {
   return (
     <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
       
-      {/* Curtain Reveal Animation */}
-      <motion.div 
-        className="absolute inset-0 z-50 bg-foreground"
-        initial={{ x: 0 }}
-        animate={{ x: "100%" }}
-        transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1], delay: 0 }}
-      />
+      {/* Curtain Reveal Animation handled globally in PageTransition */}
 
       {/* Background Image Container */}
       <div className="absolute inset-0 w-full h-full -z-20">
