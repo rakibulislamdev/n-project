@@ -78,7 +78,13 @@ export function Reviews() {
       <div className="max-w-7xl mx-auto px-8 w-full flex flex-col gap-8">
 
         {/* Top Filter Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-border/50 pb-6">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-border/50 pb-6"
+        >
           <div className="flex items-center gap-6 overflow-x-auto w-full pb-2 md:pb-0 scrollbar-hide">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.value;
@@ -113,7 +119,7 @@ export function Reviews() {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </motion.div>
 
         {/* Reviews Flexbox (Used instead of CSS Grid to allow perfect popLayout shuffle animations) */}
         <motion.div layout className="flex flex-wrap gap-6 min-h-[300px]">

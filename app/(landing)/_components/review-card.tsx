@@ -22,7 +22,8 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
     <motion.div
       layout
       initial={{ opacity: 0, y: 40, scale: 0.9, filter: "blur(10px)" }}
-      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.1 }}
       exit={{
         opacity: 0,
         y: -30,

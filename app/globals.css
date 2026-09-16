@@ -95,5 +95,32 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  /* Custom Scrollbar for Webkit */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 6px;
+    border: 2px solid var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
+
+  /* Custom Scrollbar for Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--background);
   }
 }

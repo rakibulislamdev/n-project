@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ScrollDiv } from "@/components/scroll-animation";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, XIcon } from "@/lib/icons";
 import Image from "next/image";
 
@@ -7,7 +8,11 @@ export function Footer() {
     <footer className="w-full bg-background font-inter pb-8 pt-16">
       <div className="max-w-7xl mx-auto px-8 w-full flex flex-col gap-12">
         {/* CTA Banner */}
-        <div className="relative w-full rounded-2xl overflow-hidden min-h-[320px] flex items-center bg-muted">
+        <ScrollDiv 
+          scale={0.95}
+          duration={0.7}
+          className="relative w-full rounded-2xl overflow-hidden min-h-[320px] flex items-center bg-muted"
+        >
           <div className="absolute inset-0 z-0">
             <Image
               src="/footer-image.svg"
@@ -35,10 +40,16 @@ export function Footer() {
               Write a Review
             </Button>
           </div>
-        </div>
+        </ScrollDiv>
 
         {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground pt-4">
+        <ScrollDiv 
+          y={20}
+          duration={0.5}
+          delay={0.2}
+          margin="0px"
+          className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground pt-4"
+        >
           <p>© {new Date().getFullYear()} Nader Ayoub. All rights reserved.</p>
           <div className="flex items-center gap-5 text-brand-dark">
             <a href="#" className="hover:text-foreground/70 transition-colors"><FacebookIcon className="w-4 h-4" /></a>
@@ -49,7 +60,7 @@ export function Footer() {
               <XIcon className="w-4 h-4" />
             </a>
           </div>
-        </div>
+        </ScrollDiv>
       </div>
     </footer>
   );

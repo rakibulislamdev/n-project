@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { ScrollSection } from "@/components/scroll-animation";
 import { StarIcon } from "@/lib/icons";
 
 export function ReviewSummary() {
   return (
-    <section className="w-full bg-background border-y border-border/50 py-12">
+    <ScrollSection 
+      y={30}
+      duration={0.6}
+      className="w-full bg-background border-y border-border/50 py-12"
+    >
       <div className="max-w-7xl mx-auto px-8 w-full flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left Side: Rating */}
         <div className="flex items-center gap-6">
@@ -30,6 +35,6 @@ export function ReviewSummary() {
           </Button>
         </div>
       </div>
-    </section>
+    </ScrollSection>
   );
 }
