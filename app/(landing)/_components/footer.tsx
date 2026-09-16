@@ -23,7 +23,7 @@ export function Footer() {
             />
           </div>
 
-          <div className="relative z-10 w-full p-6 md:p-10 lg:p-16 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 text-center md:text-left">
+          <div className="relative z-10 w-full p-6 md:p-10 lg:p-16 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-6 text-center lg:text-left">
             <div className="flex flex-col gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-foreground/80">
                 Have a story to share?

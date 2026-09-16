@@ -62,7 +62,7 @@ export function Hero() {
           initial="hidden"
           animate="show"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-sans tracking-tight text-foreground leading-[1.1] md:leading-tight flex flex-wrap gap-x-3 md:gap-x-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-sans tracking-tight text-foreground leading-[1.1] lg:leading-tight flex flex-wrap gap-x-3 md:gap-x-4">
             <motion.span variants={wordVars} className="font-bold">Real</motion.span>
             <motion.span variants={wordVars} className="italic font-light">People</motion.span>
             <div className="w-full h-0" /> {/* Line Break */}

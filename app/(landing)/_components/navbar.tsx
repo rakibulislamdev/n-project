@@ -39,7 +39,7 @@ export function Navbar() {
         <div className="text-xl font-bold tracking-tight">Logo</div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => {
             const isActive =
               (link.href === "/" && pathname === "/" && !activeHash) ||
@@ -65,7 +65,7 @@ export function Navbar() {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="md:hidden p-2 -mr-2 text-foreground"
+          className="lg:hidden p-2 -mr-2 text-foreground"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle Menu"
         >
@@ -99,14 +99,14 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
             />
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-              className="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-background border-r border-border/50 z-50 md:hidden flex flex-col shadow-2xl"
+              className="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-background border-r border-border/50 z-50 lg:hidden flex flex-col shadow-2xl"
             >
               <div className="flex items-center justify-between p-6 border-b border-border/50">
                 <span className="text-xl font-bold tracking-tight">Logo</span>
