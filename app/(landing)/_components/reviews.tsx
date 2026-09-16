@@ -74,8 +74,8 @@ export function Reviews() {
   );
 
   return (
-    <section className="w-full bg-background py-16 font-inter" id="reviews">
-      <div className="max-w-7xl mx-auto px-8 w-full flex flex-col gap-8">
+    <section className="w-full bg-background py-12 md:py-16 font-inter" id="reviews">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex flex-col gap-6 md:gap-8">
 
         {/* Top Filter Bar */}
         <motion.div 
@@ -85,7 +85,7 @@ export function Reviews() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-border/50 pb-6"
         >
-          <div className="flex items-center gap-6 overflow-x-auto w-full pb-2 md:pb-0 scrollbar-hide">
+          <div className="flex items-center gap-4 md:gap-6 overflow-x-auto w-full pb-3 md:pb-0 scrollbar-hide">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.value;
               const count = tab.value === "All" 
@@ -107,9 +107,9 @@ export function Reviews() {
             })}
           </div>
 
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 w-full md:w-auto mt-2 md:mt-0">
             <Select value={sortBy} onValueChange={(val) => val && setSortBy(val)}>
-              <SelectTrigger className="w-[180px] bg-secondary text-secondary-foreground border-none rounded-md">
+              <SelectTrigger className="w-full md:w-[180px] bg-secondary text-secondary-foreground border-none rounded-md">
                 <SelectValue placeholder="Sort By" />
               </SelectTrigger>
               <SelectContent alignItemWithTrigger={false} className="font-inter border-border/50">

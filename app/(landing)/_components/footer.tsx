@@ -5,8 +5,8 @@ import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-background font-inter pb-8 pt-16">
-      <div className="max-w-7xl mx-auto px-8 w-full flex flex-col gap-12">
+    <footer className="w-full bg-background font-inter pb-8 pt-12 md:pt-16">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex flex-col gap-10 md:gap-12">
         {/* CTA Banner */}
         <ScrollDiv 
           scale={0.95}
@@ -23,15 +23,15 @@ export function Footer() {
             />
           </div>
 
-          <div className="relative z-10 w-full p-10 md:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div className="relative z-10 w-full p-6 md:p-10 lg:p-16 flex flex-col md:flex-row justify-between items-center md:items-end gap-6 text-center md:text-left">
             <div className="flex flex-col gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-foreground/80">
                 Have a story to share?
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
                 Your Experience Matters
               </h2>
-              <p className="text-sm text-foreground/80 mt-2">
+              <p className="text-sm text-foreground/80 mt-1 md:mt-2">
                 Help others by sharing your experience. It only takes a minute.
               </p>
             </div>

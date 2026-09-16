@@ -7,9 +7,9 @@ export function ReviewSummary() {
     <ScrollSection 
       y={30}
       duration={0.6}
-      className="w-full bg-background border-y border-border/50 py-12"
+      className="w-full bg-background border-y border-border/50 py-10 md:py-12"
     >
-      <div className="max-w-7xl mx-auto px-8 w-full flex flex-col md:flex-row items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
         {/* Left Side: Rating */}
         <div className="flex items-center gap-6">
           <span className="text-5xl md:text-6xl font-bold text-foreground">4.9</span>
