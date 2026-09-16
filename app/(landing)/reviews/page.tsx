@@ -32,27 +32,27 @@ export default function ReviewsPage() {
 
       <Navbar />
 
-      <div className="flex-1 w-full max-w-7xl mx-auto px-5 md:px-8 pt-36 md:pt-48 pb-12 relative z-10">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-36 md:pt-44 lg:pt-48 pb-8 md:pb-12 relative z-10">
         {/* Header Section */}
-        <div className="flex flex-col items-center text-center gap-4 mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground font-sans">
+        <div className="flex flex-col items-center text-center gap-3 md:gap-4 mb-8 sm:mb-12 md:mb-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground font-sans">
             Your <span className="italic font-serif font-light">Feedback</span> Means a Lot
           </h1>
-          <p className="text-sm md:text-base text-foreground/70 max-w-2xl font-inter">
+          <p className="text-xs sm:text-sm md:text-base text-foreground/70 max-w-2xl font-inter px-2">
             If you've worked with me, I'd to hear about your experience. Your review helps me
             grow and supports others in making confident decisions.
           </p>
         </div>
 
         {/* 2-Column Content */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch justify-center">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12 items-stretch justify-center">
           {/* Left Column: Profile Card */}
-          <div className="w-full lg:w-[400px] flex-shrink-0 flex flex-col">
+          <div className="w-full md:w-[340px] lg:w-[400px] flex-shrink-0 flex flex-col">
             <ProfileCard previewImage={preview} />
           </div>
 
           {/* Right Column: Review Form */}
-          <div className="w-full max-w-2xl flex flex-col">
+          <div className="w-full md:flex-1 max-w-2xl flex flex-col">
             <ReviewForm file={file} setFile={setFile} preview={preview} />
           </div>
         </div>
