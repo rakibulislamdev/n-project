@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-brand-dark: #121212;
+  --color-brand-gray: #888882;
+  --color-brand-yellow: #FFD000;
+  --color-brand-light: #ECECEC;
+  --color-brand-white: #FFFFFF;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inria-serif, "Inria Serif");
+  --font-inter: var(--font-inter, "Inter");
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: var(--color-brand-white);
+  --foreground: var(--color-brand-dark);
+  --card: var(--color-brand-white);
+  --card-foreground: var(--color-brand-dark);
+  --popover: var(--color-brand-white);
+  --popover-foreground: var(--color-brand-dark);
+  --primary: var(--color-brand-yellow);
+  --primary-foreground: var(--color-brand-dark);
+  --secondary: var(--color-brand-light);
+  --secondary-foreground: var(--color-brand-dark);
+  --muted: var(--color-brand-light);
+  --muted-foreground: var(--color-brand-gray);
+  --accent: var(--color-brand-yellow);
+  --accent-foreground: var(--color-brand-dark);
+  --destructive: #ef4444;
+  --border: var(--color-brand-light);
+  --input: var(--color-brand-light);
+  --ring: var(--color-brand-yellow);
+  --radius: 0.625rem;
+}
+
+.dark {
+  /* Premium Real Estate Dark Mode */
+  --background: #0A0A0A; /* Deep rich black for luxury feel */
+  --foreground: #F5F5F5; /* Soft white for elegant readability */
+  --card: #141414; /* Slightly elevated dark surface */
+  --card-foreground: #F5F5F5;
+  --popover: #141414;
+  --popover-foreground: #F5F5F5;
+  --primary: #FFD000; /* Gold/Yellow accent for premium properties */
+  --primary-foreground: #0A0A0A;
+  --secondary: #222222; /* Subtle dark gray for secondary elements */
+  --secondary-foreground: #FFFFFF;
+  --muted: #1A1A1A; /* Very subtle background for muted areas */
+  --muted-foreground: #888882; /* Warm gray for secondary text */
+  --accent: #FFD000;
+  --accent-foreground: #0A0A0A;
+  --destructive: #ef4444;
+  --border: #2A2A2A; /* Soft borders so they aren't distracting */
+  --input: #2A2A2A;
+  --ring: #FFD000; /* Gold focus rings */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
