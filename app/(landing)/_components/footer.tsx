@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ScrollDiv } from "@/components/scroll-animation";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, XIcon } from "@/lib/icons";
@@ -36,9 +37,11 @@ export function Footer() {
               </p>
             </div>
 
-            <Button variant="default" size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-medium">
-              Write a Review
-            </Button>
+            <Link href="/reviews">
+              <Button variant="default" size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-medium">
+                Write a Review
+              </Button>
+            </Link>
           </div>
         </ScrollDiv>
 
