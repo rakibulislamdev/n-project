@@ -6,12 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { StarIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
-import { motion } from "framer-motion";
 
 export function ReviewForm({
   file,
   setFile,
-  preview
 }: {
   file: File | null;
   setFile: (f: File | null) => void;
@@ -21,7 +19,7 @@ export function ReviewForm({
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   // Drag and drop state
   const [dragActive, setDragActive] = useState(false);
 
@@ -73,7 +71,7 @@ export function ReviewForm({
         <h2 className="text-2xl font-bold text-foreground">Write a Review</h2>
         <div className="flex items-center gap-2 text-xs text-foreground/60">
           <SafeInfoIcon className="w-5 h-5" />
-          <p>Your information is safe and will<br/>never be shared without permission.</p>
+          <p>Your information is safe and will<br />never be shared without permission.</p>
         </div>
       </div>
 
@@ -81,9 +79,9 @@ export function ReviewForm({
         {/* Name */}
         <div className="flex flex-col gap-2">
           <label className="text-xs font-semibold text-foreground">Name <span className="text-red-500">*</span></label>
-          <Input 
-            required 
-            placeholder="Enter your name" 
+          <Input
+            required
+            placeholder="Enter your name"
             className="bg-background border border-border shadow-sm hover:border-border/80 h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors"
           />
         </div>
@@ -91,10 +89,10 @@ export function ReviewForm({
         {/* Email */}
         <div className="flex flex-col gap-2">
           <label className="text-xs font-semibold text-foreground">Email <span className="text-red-500">*</span></label>
-          <Input 
-            required 
+          <Input
+            required
             type="email"
-            placeholder="Enter your email" 
+            placeholder="Enter your email"
             className="bg-background border border-border shadow-sm hover:border-border/80 h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors"
           />
         </div>
@@ -111,12 +109,11 @@ export function ReviewForm({
                 onMouseEnter={() => setHoverRating(star)}
                 className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
               >
-                <StarIcon 
-                  className={`w-6 h-6 transition-colors duration-200 text-primary ${
-                    (hoverRating || rating) >= star 
-                      ? "fill-primary" 
-                      : "fill-transparent"
-                  }`} 
+                <StarIcon
+                  className={`w-6 h-6 transition-colors duration-200 text-primary ${(hoverRating || rating) >= star
+                    ? "fill-primary"
+                    : "fill-transparent"
+                    }`}
                 />
               </button>
             ))}
@@ -126,9 +123,9 @@ export function ReviewForm({
         {/* Review Textarea */}
         <div className="flex flex-col gap-2 relative">
           <label className="text-xs font-semibold text-foreground">Your Review <span className="text-red-500">*</span></label>
-          <Textarea 
+          <Textarea
             required
-            placeholder="Tell us about your experience..." 
+            placeholder="Tell us about your experience..."
             className="bg-background border border-border shadow-sm hover:border-border/80 min-h-[160px] resize-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors pt-4 pb-8"
             maxLength={500}
             value={reviewText}
@@ -142,22 +139,21 @@ export function ReviewForm({
         {/* Photo Upload */}
         <div className="flex flex-col gap-2">
           <label className="text-xs font-semibold text-foreground">Add a Photo (Optional)</label>
-          <div 
-            className={`relative border border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-2 transition-colors cursor-pointer group ${
-              dragActive ? "border-primary bg-primary/5" : "border-border bg-secondary/20 hover:bg-secondary/40"
-            }`}
+          <div
+            className={`relative border border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-2 transition-colors cursor-pointer group ${dragActive ? "border-primary bg-primary/5" : "border-border bg-secondary/20 hover:bg-secondary/40"
+              }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
             onClick={() => document.getElementById("photo-upload")?.click()}
           >
-            <input 
-              id="photo-upload" 
-              type="file" 
-              className="hidden" 
-              accept="image/png, image/jpeg" 
-              onChange={handleChange} 
+            <input
+              id="photo-upload"
+              type="file"
+              className="hidden"
+              accept="image/png, image/jpeg"
+              onChange={handleChange}
             />
             {file ? (
               <div className="flex flex-col items-center gap-2 text-center">
