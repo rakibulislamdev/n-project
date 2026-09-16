@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { StarIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
+import { StarIcon, StarOutlineIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
 
 export function ReviewForm({
   file,
@@ -109,12 +109,11 @@ export function ReviewForm({
                 onMouseEnter={() => setHoverRating(star)}
                 className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
               >
-                <StarIcon
-                  className={`w-6 h-6 transition-colors duration-200 text-primary ${(hoverRating || rating) >= star
-                    ? "fill-primary"
-                    : "fill-transparent"
-                    }`}
-                />
+                {(hoverRating || rating) >= star ? (
+                  <StarIcon className="w-6 h-6 transition-colors duration-200 text-primary" />
+                ) : (
+                  <StarOutlineIcon className="w-6 h-6 transition-colors duration-200 text-primary" />
+                )}
               </button>
             ))}
           </div>

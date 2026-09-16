@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ScrollSection } from "@/components/scroll-animation";
 import { StarIcon } from "@/lib/icons";
@@ -30,9 +31,11 @@ export function ReviewSummary() {
           <p className="text-muted-foreground italic font-light text-lg leading-snug">
             Share your experience and help others make confident decisions.
           </p>
-          <Button className="rounded-full px-6 bg-brand-dark text-brand-white hover:bg-brand-dark/90 dark:bg-brand-white dark:text-brand-dark dark:hover:bg-brand-white/90 font-medium font-inter">
-            Write a Review
-          </Button>
+          <Link href="/reviews">
+            <Button className="rounded-full px-6 bg-brand-dark text-brand-white hover:bg-brand-dark/90 dark:bg-brand-white dark:text-brand-dark dark:hover:bg-brand-white/90 font-medium font-inter">
+              Write a Review
+            </Button>
+          </Link>
         </div>
       </div>
     </ScrollSection>

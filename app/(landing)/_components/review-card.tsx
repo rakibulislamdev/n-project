@@ -64,7 +64,7 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
             {[...Array(5)].map((_, i) => (
               <StarIcon
                 key={i}
-                className={`w-4 h-4 ${i < review.rating ? "text-primary" : "text-muted-foreground/30"}`}
+                className={`w-4 h-4 ${i < review.rating ? "text-primary" : "text-muted-foreground/20"}`}
               />
             ))}
           </div>
