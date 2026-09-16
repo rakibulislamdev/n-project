@@ -36,14 +36,15 @@ export function Navbar() {
   return (
     <header className="absolute top-0 w-full z-50 py-6 font-inter">
       <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex items-center justify-between">
-        <div className="text-xl font-bold tracking-tight">Logo</div>
+        <Link href="/" className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">Logo</Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => {
             const isActive =
               (link.href === "/" && pathname === "/" && !activeHash) ||
-              (activeHash === link.href);
+              (link.href.startsWith("#") && activeHash === link.href) ||
+              (!link.href.startsWith("#") && link.href !== "/" && pathname === link.href);
 
             return (
               <Link
@@ -109,7 +110,7 @@ export function Navbar() {
               className="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-background border-r border-border/50 z-50 lg:hidden flex flex-col shadow-2xl"
             >
               <div className="flex items-center justify-between p-6 border-b border-border/50">
-                <span className="text-xl font-bold tracking-tight">Logo</span>
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold tracking-tight">Logo</Link>
                 <button
                   className="p-2 -mr-2 text-foreground"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -121,7 +122,8 @@ export function Navbar() {
                 {navLinks.map((link) => {
                   const isActive =
                     (link.href === "/" && pathname === "/" && !activeHash) ||
-                    (activeHash === link.href);
+                    (link.href.startsWith("#") && activeHash === link.href) ||
+                    (!link.href.startsWith("#") && link.href !== "/" && pathname === link.href);
 
                   return (
                     <Link

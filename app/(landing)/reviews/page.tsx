@@ -22,6 +22,14 @@ export default function ReviewsPage() {
 
   return (
     <main className="flex-1 flex flex-col relative overflow-hidden">
+      {/* Background Image / Blur */}
+      <div 
+        className="absolute top-0 left-0 w-full h-[600px] z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+        style={{ backgroundImage: "url('/review-page-image.svg')" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
+      </div>
+
       <Navbar />
 
       <div className="flex-1 w-full max-w-7xl mx-auto px-5 md:px-8 pt-36 md:pt-48 pb-12 relative z-10">
