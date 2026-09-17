@@ -4,17 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useReviewsStore } from "@/lib/store/use-reviews-store";
-import { 
-  Home01Icon, 
+import {
+  Home01Icon,
   Home09Icon,
-  Building03Icon, 
-  StarIcon, 
-  ArrowUp01Icon, 
-  ArrowDown01Icon 
+  Building03Icon,
+  StarIcon,
+  ArrowUp01Icon,
+  ArrowDown01Icon,
+  HourglassIcon,
+  ValidationApprovalIcon,
+  SidebarRightIcon
 } from "hugeicons-react";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isReviewsOpen, setIsReviewsOpen] = useState(true);
   const { pendingReviews, approvedReviews } = useReviewsStore();
 
@@ -35,56 +39,77 @@ export function Sidebar() {
       matchPath: "/reviews",
       icon: StarIcon,
       subItems: [
-        { title: "Pending", href: "/dashboard/reviews/pending", count: pendingReviews.length },
-        { title: "Approved", href: "/dashboard/reviews/approved", count: approvedReviews.length },
+        { title: "Pending", href: "/dashboard/reviews/pending", count: pendingReviews.length, icon: HourglassIcon },
+        { title: "Approved", href: "/dashboard/reviews/approved", count: approvedReviews.length, icon: ValidationApprovalIcon },
       ],
     },
   ];
 
   return (
-    <div className="w-64 bg-[#121212] min-h-screen flex flex-col text-zinc-400 py-6 border-r border-zinc-800">
-      {/* Logo */}
-      <div className="px-6 mb-10 flex items-center gap-3 cursor-pointer">
-        <Home09Icon className="w-8 h-8 text-orange-500" />
-        <span className="text-white font-medium text-lg tracking-wide">RealEstate</span>
+    <div className={`bg-[#121212] min-h-screen flex flex-col text-zinc-400 py-6 border-r border-zinc-800 transition-all duration-300 ease-in-out relative ${isSidebarOpen ? "w-64" : "w-20"}`}>
+      {/* Header */}
+      <div className="relative mb-10 h-10 w-full overflow-hidden">
+        <div className={`absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-3 cursor-pointer transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-[160px]" : "opacity-0 w-0 pointer-events-none"}`}>
+          <Home09Icon className="w-7 h-7 text-orange-500 shrink-0" />
+          <span className="text-white font-bold text-[16px] tracking-wide whitespace-nowrap">RealEstate</span>
+        </div>
+
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`absolute top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-2 rounded-lg hover:bg-zinc-800 transition-all duration-300 shrink-0 z-10 ${isSidebarOpen ? "right-4" : "left-1/2 -translate-x-1/2"}`}
+        >
+          <SidebarRightIcon className="w-6 h-6" />
+        </button>
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 flex flex-col gap-1">
+      <nav className="flex-1 flex flex-col gap-1 overflow-hidden">
         {NAV_ITEMS.map((item, index) => {
           if (item.subItems) {
             const isActive = pathname?.includes(item.matchPath || "");
             return (
               <div key={index} className="flex flex-col mt-2">
-                <button 
-                  onClick={() => setIsReviewsOpen(!isReviewsOpen)}
-                  className={`flex items-center justify-between px-6 py-3 transition-colors ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "hover:text-white border-l-[3px] border-transparent"}`}
+                <button
+                  onClick={() => {
+                    if (!isSidebarOpen) {
+                      setIsSidebarOpen(true);
+                      setIsReviewsOpen(true);
+                    } else {
+                      setIsReviewsOpen(!isReviewsOpen);
+                    }
+                  }}
+                  className={`flex items-center px-6 py-3 w-full transition-colors ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "hover:text-white border-l-[3px] border-transparent"}`}
                 >
-                  <div className="flex items-center gap-3">
-                    <item.icon className="w-5 h-5" />
-                    <span className="font-medium text-[15px]">{item.title}</span>
+                  <item.icon className="w-[18px] h-[18px] shrink-0" />
+                  <div className={`flex items-center justify-between transition-all duration-300 overflow-hidden ${isSidebarOpen ? "max-w-[200px] w-full ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>
+                    <span className="font-medium text-[14px] whitespace-nowrap">{item.title}</span>
+                    {isReviewsOpen ? <ArrowUp01Icon className="w-4 h-4 shrink-0" /> : <ArrowDown01Icon className="w-4 h-4 shrink-0" />}
                   </div>
-                  {isReviewsOpen ? (
-                    <ArrowUp01Icon className="w-4 h-4" />
-                  ) : (
-                    <ArrowDown01Icon className="w-4 h-4" />
-                  )}
                 </button>
-                
-                <div 
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${isReviewsOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}
+
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${(isReviewsOpen && isSidebarOpen) ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}
                 >
-                  <div className="flex flex-col gap-1 mt-1 py-1">
+                  <div className="flex flex-col gap-1 mt-1 py-1 relative">
+                    {/* Vertical line connecting children to parent (visible only when expanded) */}
+                    <div className={`absolute left-[32px] top-0 bottom-6 w-px bg-zinc-800 transition-all duration-300 ${isSidebarOpen ? "opacity-100" : "opacity-0"}`}></div>
+
                     {item.subItems.map((subItem, subIndex) => (
-                      <Link 
+                      <Link
                         key={subIndex}
-                        href={subItem.href} 
-                        className={`flex items-center justify-between pl-14 pr-6 py-2 hover:text-white transition-colors ${pathname === subItem.href ? "bg-[#1e1e1e] text-white font-medium" : ""}`}
+                        href={subItem.href}
+                        className={`flex items-center py-2 transition-all duration-300 hover:text-white relative ${pathname === subItem.href ? "bg-[#1e1e1e] text-white font-medium" : "text-zinc-500 font-medium"} ${isSidebarOpen ? "pl-[52px] pr-6" : "pl-8 pr-6"}`}
                       >
-                        <span className="text-[14px]">{subItem.title}</span>
-                        {subItem.count !== undefined && (
-                          <span className="bg-zinc-800 text-[10px] px-2 py-0.5 rounded-full text-zinc-300">{subItem.count}</span>
-                        )}
+                        {/* Horizontal branch line (visible only when expanded) */}
+                        <div className={`absolute left-[32px] top-1/2 -translate-y-1/2 w-[10px] h-px bg-zinc-800 transition-all duration-300 ${isSidebarOpen ? "opacity-100" : "opacity-0"}`}></div>
+
+                        <subItem.icon className="w-[15px] h-[15px] shrink-0" />
+                        <div className={`flex items-center justify-between transition-all duration-300 overflow-hidden ${isSidebarOpen ? "w-full ml-3 opacity-100" : "w-0 ml-0 opacity-0"}`}>
+                          <span className="text-[13px] whitespace-nowrap">{subItem.title}</span>
+                          {subItem.count !== undefined && (
+                            <span className="bg-zinc-800 text-[11px] font-bold px-2 py-0.5 rounded-full text-zinc-300 shrink-0">{subItem.count}</span>
+                          )}
+                        </div>
                       </Link>
                     ))}
                   </div>
@@ -96,13 +121,13 @@ export function Sidebar() {
           const isActive = item.exact ? pathname === item.href : pathname?.includes(item.href || "");
 
           return (
-            <Link 
+            <Link
               key={index}
-              href={item.href || "#"} 
-              className={`flex items-center gap-3 px-6 py-3 transition-colors hover:text-white ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "border-l-[3px] border-transparent"}`}
+              href={item.href || "#"}
+              className={`flex items-center px-6 py-3 transition-colors hover:text-white ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "border-l-[3px] border-transparent"}`}
             >
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium text-[15px]">{item.title}</span>
+              <item.icon className="w-[18px] h-[18px] shrink-0" />
+              <span className={`font-medium text-[14px] whitespace-nowrap overflow-hidden transition-all duration-300 ${isSidebarOpen ? "max-w-[120px] ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>{item.title}</span>
             </Link>
           );
         })}

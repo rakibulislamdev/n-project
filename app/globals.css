@@ -66,33 +66,44 @@
 
 .dark {
   /* Premium Real Estate Dark Mode */
-  --background: #0A0A0A; /* Deep rich black for luxury feel */
-  --foreground: #F5F5F5; /* Soft white for elegant readability */
-  --card: #141414; /* Slightly elevated dark surface */
+  --background: #0A0A0A;
+  /* Deep rich black for luxury feel */
+  --foreground: #F5F5F5;
+  /* Soft white for elegant readability */
+  --card: #141414;
+  /* Slightly elevated dark surface */
   --card-foreground: #F5F5F5;
   --popover: #141414;
   --popover-foreground: #F5F5F5;
-  --primary: #FFD000; /* Gold/Yellow accent for premium properties */
+  --primary: #FFD000;
+  /* Gold/Yellow accent for premium properties */
   --primary-foreground: #0A0A0A;
-  --secondary: #222222; /* Subtle dark gray for secondary elements */
+  --secondary: #222222;
+  /* Subtle dark gray for secondary elements */
   --secondary-foreground: #FFFFFF;
-  --muted: #1A1A1A; /* Very subtle background for muted areas */
-  --muted-foreground: #888882; /* Warm gray for secondary text */
+  --muted: #1A1A1A;
+  /* Very subtle background for muted areas */
+  --muted-foreground: #888882;
+  /* Warm gray for secondary text */
   --accent: #FFD000;
   --accent-foreground: #0A0A0A;
   --destructive: #ef4444;
-  --border: #2A2A2A; /* Soft borders so they aren't distracting */
+  --border: #2A2A2A;
+  /* Soft borders so they aren't distracting */
   --input: #2A2A2A;
-  --ring: #FFD000; /* Gold focus rings */
+  --ring: #FFD000;
+  /* Gold focus rings */
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
     scroll-behavior: smooth;

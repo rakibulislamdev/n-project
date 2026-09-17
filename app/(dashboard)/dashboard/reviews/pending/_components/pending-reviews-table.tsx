@@ -18,10 +18,10 @@ export function PendingReviewsTable({ reviews, selectedIds, onToggleSelect, onAp
             <TableHead className="w-[72px] pl-8">
               {/* Visual placeholder for checkbox col */}
             </TableHead>
-            <TableHead className="text-[11px] font-bold text-zinc-600 tracking-widest w-[25%] h-14">CLIENT</TableHead>
-            <TableHead className="text-[11px] font-bold text-zinc-600 tracking-widest w-[40%] h-14">REVIEW</TableHead>
-            <TableHead className="text-[11px] font-bold text-zinc-600 tracking-widest w-[15%] h-14">PHOTOS</TableHead>
-            <TableHead className="text-[11px] font-bold text-zinc-600 tracking-widest w-[20%] text-right pr-12 h-14">ACTIONS</TableHead>
+            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[25%] h-14">CLIENT</TableHead>
+            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[40%] h-14">REVIEW</TableHead>
+            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[15%] h-14">PHOTOS</TableHead>
+            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[20%] text-right pr-12 h-14">ACTIONS</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

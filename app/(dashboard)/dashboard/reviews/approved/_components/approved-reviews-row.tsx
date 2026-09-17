@@ -39,8 +39,8 @@ export function ApprovedReviewsRow({ review, isSelected, onToggleSelect, onRemov
             <AvatarFallback>SC</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-0.5">
-            <span className="font-bold text-[15px] text-zinc-900">{review.clientName}</span>
-            <span className="text-[12px] text-zinc-400 font-medium tracking-tight">{review.clientDate}</span>
+            <span className="font-semibold text-[14px] text-zinc-900">{review.clientName}</span>
+            <span className="text-[13px] text-zinc-500 font-medium">{review.clientDate}</span>
           </div>
         </div>
       </TableCell>

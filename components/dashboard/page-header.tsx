@@ -27,10 +27,10 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
   return (
     <header className="px-8 py-6 flex justify-between items-start">
       <div>
-        <div className="text-[10px] text-zinc-400 font-bold tracking-widest mb-2 flex items-center gap-2">
+        <div className="text-[11px] text-zinc-400 font-semibold tracking-wider mb-2 flex items-center gap-2">
           {breadcrumbs.map((crumb, index) => (
             <React.Fragment key={crumb}>
-              <span className={index === breadcrumbs.length - 1 ? "text-zinc-800" : ""}>
+              <span className={index === breadcrumbs.length - 1 ? "text-zinc-700" : ""}>
                 {crumb.toUpperCase()}
               </span>
               {index < breadcrumbs.length - 1 && (
@@ -39,8 +39,8 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
             </React.Fragment>
           ))}
         </div>
-        <h1 className="text-3xl font-extrabold mb-2 text-zinc-900 tracking-tight">{title}</h1>
-        <p className="text-zinc-400 text-sm font-medium">{description}</p>
+        <h1 className="text-[28px] font-bold mb-1.5 text-zinc-900 tracking-tight">{title}</h1>
+        <p className="text-zinc-500 text-sm">{description}</p>
       </div>
       <div className="flex items-center gap-6 mt-2">
         <button className="relative">
