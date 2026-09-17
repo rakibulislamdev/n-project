@@ -30,17 +30,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "hsl(var(--foreground))",
-          "--normal-text": "hsl(var(--background))",
+          "--normal-bg": "#000000",
+          "--normal-text": "#ffffff",
           "--normal-border": "transparent",
-          "--border-radius": "1rem",
+          "--border-radius": "12px",
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "group-[.toaster]:bg-foreground group-[.toaster]:text-background font-inter shadow-xl rounded-2xl border-none",
-          icon: "group-[.toast]:text-primary",
-          title: "group-[.toast]:text-background font-medium",
+          toast: "font-bold text-[13px] rounded-[12px] px-5 py-4 shadow-xl",
+          icon: "group-[.toast]:text-green-400",
+          title: "group-[.toast]:text-white font-bold",
         },
       }}
       {...props}

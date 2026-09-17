@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { useReviewsStore } from "@/lib/store/use-reviews-store";
 import { PendingReviewsTable } from "./_components/pending-reviews-table";
 import { PendingReviewsFooter } from "./_components/pending-reviews-footer";
+import { toast } from "sonner";
 
 
 export default function PendingReviewsPage() {
@@ -70,8 +71,14 @@ export default function PendingReviewsPage() {
           reviews={currentReviews}
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
-          onApprove={handleAction}
-          onReject={handleAction}
+          onApprove={(id) => {
+            handleAction(id);
+            toast.success("Review approved successfully");
+          }}
+          onReject={(id) => {
+            handleAction(id);
+            toast.success("Review rejected successfully");
+          }}
         />
 
         <PendingReviewsFooter
@@ -82,8 +89,16 @@ export default function PendingReviewsPage() {
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
-          onApproveSelected={handleBatchAction}
-          onRejectSelected={handleBatchAction}
+          onApproveSelected={() => {
+            const count = selectedIds.length;
+            handleBatchAction();
+            toast.success(`${count} review${count !== 1 ? 's' : ''} approved successfully`);
+          }}
+          onRejectSelected={() => {
+            const count = selectedIds.length;
+            handleBatchAction();
+            toast.success(`${count} review${count !== 1 ? 's' : ''} rejected successfully`);
+          }}
         />
       </div>
     </div>
