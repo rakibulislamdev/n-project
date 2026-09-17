@@ -42,13 +42,13 @@ interface ReviewsState {
 export const useReviewsStore = create<ReviewsState>((set) => ({
   pendingReviews: INITIAL_PENDING_REVIEWS,
   approvedReviews: INITIAL_APPROVED_REVIEWS,
-  setPendingReviews: (reviewsOrUpdater: Review[] | ((prev: Review[]) => Review[])) =>
+  setPendingReviews: (reviewsOrUpdater: ReviewData[] | ((prev: ReviewData[]) => ReviewData[])) =>
     set((state) => ({
       pendingReviews: typeof reviewsOrUpdater === "function"
         ? reviewsOrUpdater(state.pendingReviews)
         : reviewsOrUpdater
     })),
-  setApprovedReviews: (reviewsOrUpdater: Review[] | ((prev: Review[]) => Review[])) =>
+  setApprovedReviews: (reviewsOrUpdater: ReviewData[] | ((prev: ReviewData[]) => ReviewData[])) =>
     set((state) => ({
       approvedReviews: typeof reviewsOrUpdater === "function"
         ? reviewsOrUpdater(state.approvedReviews)
