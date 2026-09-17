@@ -6,22 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ReviewCard, type Review } from "./review-card";
 import { CustomPagination } from "@/components/custom-pagination";
 
-// Mock data with varied ratings and dates
-const MOCK_REVIEWS: Review[] = [
-  { id: 1, name: "Ahmed Rahman", date: "August 20, 2023", avatarUrl: "https://i.pravatar.cc/150?u=1", rating: 5, text: "Nader made the entire process so easy. He was always available, answered all my questions, and helped me find the perfect home. Highly recommended!" },
-  { id: 2, name: "Sarah Jenkins", date: "July 15, 2023", avatarUrl: "https://i.pravatar.cc/150?u=2", rating: 4, text: "Great experience overall. The communication was solid, though closing took a bit longer than expected." },
-  { id: 3, name: "Michael Chen", date: "September 10, 2023", avatarUrl: "https://i.pravatar.cc/150?u=3", rating: 5, text: "Absolutely phenomenal service. Found us our dream home in under a week. Five stars!" },
-  { id: 4, name: "Emily Watson", date: "June 05, 2023", avatarUrl: "https://i.pravatar.cc/150?u=4", rating: 3, text: "Service was okay. We found a house but felt a bit rushed during the tours." },
-  { id: 5, name: "David Miller", date: "October 02, 2023", avatarUrl: "https://i.pravatar.cc/150?u=5", rating: 5, text: "I can't say enough good things. Very professional, knowledgeable, and patient." },
-  { id: 6, name: "Jessica Alba", date: "May 22, 2023", avatarUrl: "https://i.pravatar.cc/150?u=6", rating: 4, text: "Very helpful team. The paperwork was handled smoothly, and they were always reachable." },
-  { id: 7, name: "Robert Fox", date: "August 30, 2023", avatarUrl: "https://i.pravatar.cc/150?u=7", rating: 5, text: "Excellent market knowledge. Helped us negotiate a fantastic deal on our new property." },
-  { id: 8, name: "Linda Smith", date: "September 25, 2023", avatarUrl: "https://i.pravatar.cc/150?u=8", rating: 2, text: "Not the best experience. Communication dropped off after the initial meetings." },
-  { id: 9, name: "William James", date: "October 15, 2023", avatarUrl: "https://i.pravatar.cc/150?u=9", rating: 5, text: "Truly a luxury real estate experience. The attention to detail is unmatched." },
-  { id: 10, name: "Chris Evans", date: "November 01, 2023", avatarUrl: "https://i.pravatar.cc/150?u=10", rating: 5, text: "An absolute pleasure working with this agency. Top tier service from start to finish." },
-  { id: 11, name: "Olivia Brown", date: "December 12, 2023", avatarUrl: "https://i.pravatar.cc/150?u=11", rating: 4, text: "Good properties and good agents. Will definitely recommend them to friends." },
-  { id: 12, name: "Thomas Wilson", date: "January 18, 2024", avatarUrl: "https://i.pravatar.cc/150?u=12", rating: 1, text: "Terrible experience. The agent was unresponsive and completely ignored our requirements." },
-  { id: 13, name: "Sophia Davis", date: "February 22, 2024", avatarUrl: "https://i.pravatar.cc/150?u=13", rating: 3, text: "Average service. The property was fine but the closing process was very chaotic." },
-];
 
 const TABS = [
   { label: "All Reviews", value: "All" },
@@ -34,7 +18,7 @@ const TABS = [
 
 const ITEMS_PER_PAGE = 6;
 
-export function Reviews() {
+export function Reviews({ initialReviews }: { initialReviews?: Review[] }) {
   const [activeTab, setActiveTab] = useState<string | number>("All");
   const [sortBy, setSortBy] = useState("Most Recent");
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,10 +28,14 @@ export function Reviews() {
     setCurrentPage(1);
   }, [activeTab, sortBy]);
 
+  const reviewsData = useMemo(() => {
+    return initialReviews || [];
+  }, [initialReviews]);
+
   // Filter and sort the reviews based on state
   const displayedReviews = useMemo(() => {
     // 1. Filter
-    let filtered = MOCK_REVIEWS;
+    let filtered = reviewsData;
     if (activeTab !== "All") {
       filtered = filtered.filter(review => review.rating === activeTab);
     }
@@ -65,7 +53,7 @@ export function Reviews() {
       const dateB = new Date(b.date).getTime();
       return dateB - dateA; // Newest first
     });
-  }, [activeTab, sortBy]);
+  }, [activeTab, sortBy, reviewsData]);
 
   const totalPages = Math.ceil(displayedReviews.length / ITEMS_PER_PAGE);
   const paginatedReviews = displayedReviews.slice(
@@ -89,8 +77,8 @@ export function Reviews() {
             {TABS.map((tab) => {
               const isActive = activeTab === tab.value;
               const count = tab.value === "All" 
-                ? MOCK_REVIEWS.length 
-                : MOCK_REVIEWS.filter(r => r.rating === tab.value).length;
+                ? reviewsData.length 
+                : reviewsData.filter(r => r.rating === tab.value).length;
 
               return (
                 <button

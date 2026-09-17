@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export type Review = {
-  id: number;
+  id: number | string;
   name: string;
   date: string;
   avatarUrl: string;
