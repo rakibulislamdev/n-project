@@ -6,6 +6,11 @@ import { usePathname } from "next/navigation";
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  // Disable reveal animation for dashboard routes
+  if (pathname?.startsWith("/dashboard")) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       <motion.div

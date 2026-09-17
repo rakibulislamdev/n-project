@@ -47,7 +47,7 @@ export async function submitReviewAction(payload: any) {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      revalidatePath("/dashboard/reviews/pending");
+      revalidatePath("/dashboard", "layout");
       revalidatePath("/");
       return { success: true, message: data.message };
     }
@@ -133,8 +133,7 @@ export async function updateReviewStatusAction(id: string | number, status: stri
     const data = await response.json();
 
     if (response.ok && data.success) {
-      revalidatePath("/dashboard/reviews/pending");
-      revalidatePath("/dashboard/reviews/approved");
+      revalidatePath("/dashboard", "layout");
       revalidatePath("/");
       return { success: true, message: data.message };
     }
