@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 
 export async function uploadImageAction(formData: FormData) {
@@ -46,6 +47,8 @@ export async function submitReviewAction(payload: any) {
     const data = await response.json();
 
     if (response.ok && data.success) {
+      revalidatePath("/dashboard/reviews/pending");
+      revalidatePath("/");
       return { success: true, message: data.message };
     }
 
@@ -130,6 +133,9 @@ export async function updateReviewStatusAction(id: string | number, status: stri
     const data = await response.json();
 
     if (response.ok && data.success) {
+      revalidatePath("/dashboard/reviews/pending");
+      revalidatePath("/dashboard/reviews/approved");
+      revalidatePath("/");
       return { success: true, message: data.message };
     }
 
