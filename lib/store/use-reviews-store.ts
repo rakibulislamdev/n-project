@@ -1,25 +1,4 @@
 import { create } from "zustand";
-export const INITIAL_PENDING_REVIEWS = Array.from({ length: 6 }).map((_, i) => ({
-  id: i + 1,
-  clientName: "Stephen Crover",
-  clientDate: "Sep 12, 2025 - 2:14 PM",
-  clientAvatar: `https://i.pravatar.cc/150?u=${i + 1}`,
-  reviewRating: 5,
-  reviewText: "Rakib was amazing to work with! Very professional, responsive, and truly cares about his clients. He helped us find the perfect home and made the whole process smooth and stress-free.",
-  photoMain: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80",
-  photoCount: 2
-}));
-
-export const INITIAL_APPROVED_REVIEWS = Array.from({ length: 12 }).map((_, i) => ({
-  id: i + 100, // offset IDs
-  clientName: "Stephen Crover",
-  clientDate: "Sep 12, 2025 - 2:14 PM",
-  clientAvatar: `https://i.pravatar.cc/150?u=${i + 100}`,
-  reviewRating: 5,
-  reviewText: "Rakib was amazing to work with! Very professional, responsive, and truly cares about his clients. He helped us find the perfect home and made the whole process smooth and stress-free.",
-  photoMain: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80",
-  photoCount: 2
-}));
 
 export interface ReviewData {
   id: string | number;
@@ -40,8 +19,8 @@ interface ReviewsState {
 }
 
 export const useReviewsStore = create<ReviewsState>((set) => ({
-  pendingReviews: INITIAL_PENDING_REVIEWS,
-  approvedReviews: INITIAL_APPROVED_REVIEWS,
+  pendingReviews: [],
+  approvedReviews: [],
   setPendingReviews: (reviewsOrUpdater: ReviewData[] | ((prev: ReviewData[]) => ReviewData[])) =>
     set((state) => ({
       pendingReviews: typeof reviewsOrUpdater === "function"
