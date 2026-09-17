@@ -1,6 +1,7 @@
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -11,13 +12,27 @@ interface CustomPaginationProps {
   totalPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  className?: string;
 }
 
-export function CustomPagination({ totalPages, currentPage, onPageChange }: CustomPaginationProps) {
+const getVisiblePages = (current: number, total: number) => {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 4) {
+    return [1, 2, 3, 4, 5, '...', total];
+  }
+  if (current >= total - 3) {
+    return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  }
+  return [1, '...', current - 1, current, current + 1, '...', total];
+};
+
+export function CustomPagination({ totalPages, currentPage, onPageChange, className = "mt-8" }: CustomPaginationProps) {
   if (totalPages <= 1) return null;
 
   return (
-    <div className="mt-8">
+    <div className={className}>
       <Pagination>
         <PaginationContent className="gap-2">
           <PaginationItem>
@@ -33,8 +48,15 @@ export function CustomPagination({ totalPages, currentPage, onPageChange }: Cust
             />
           </PaginationItem>
 
-          {[...Array(totalPages)].map((_, i) => {
-            const page = i + 1;
+          {getVisiblePages(currentPage, totalPages).map((page, i) => {
+            if (page === '...') {
+              return (
+                <PaginationItem key={`ellipsis-${i}`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+            
             const isActive = currentPage === page;
             return (
               <PaginationItem key={page}>
@@ -42,7 +64,7 @@ export function CustomPagination({ totalPages, currentPage, onPageChange }: Cust
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    onPageChange(page);
+                    onPageChange(page as number);
                   }}
                   isActive={isActive}
                   className={`transition-colors rounded-md w-9 h-9 ${
