@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getPendingReviewsAction } from "@/app/actions/review";
 import PendingReviewsClient from "./_components/pending-reviews-client";
 

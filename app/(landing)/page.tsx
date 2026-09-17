@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Navbar } from "./_components/navbar";
 import { Hero } from "./_components/hero";
 import { ReviewSummary } from "./_components/review-summary";
