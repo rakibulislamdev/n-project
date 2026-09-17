@@ -25,9 +25,9 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
   }, []);
 
   return (
-    <header className="px-8 py-6 flex justify-between items-start">
-      <div>
-        <div className="text-[11px] text-zinc-400 font-semibold tracking-wider mb-2 flex items-center gap-2">
+    <header className="px-4 md:px-8 py-6 flex justify-between items-start gap-4">
+      <div className="flex-1 min-w-0">
+        <div className="text-[11px] text-zinc-400 font-semibold tracking-wider mb-2 flex flex-wrap items-center gap-2">
           {breadcrumbs.map((crumb, index) => (
             <React.Fragment key={crumb}>
               <span className={index === breadcrumbs.length - 1 ? "text-zinc-700" : ""}>
@@ -39,10 +39,10 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
             </React.Fragment>
           ))}
         </div>
-        <h1 className="text-[28px] font-bold mb-1.5 text-zinc-900 tracking-tight">{title}</h1>
-        <p className="text-zinc-500 text-sm">{description}</p>
+        <h1 className="text-[24px] md:text-[28px] font-bold mb-1.5 text-zinc-900 tracking-tight truncate">{title}</h1>
+        <p className="text-zinc-500 text-sm truncate">{description}</p>
       </div>
-      <div className="flex items-center gap-6 mt-2">
+      <div className="flex items-center gap-4 md:gap-6 shrink-0 -mt-3 md:-mt-4">
         <button className="relative">
           <Notification02Icon className="w-6 h-6 text-zinc-500" />
           <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
@@ -56,11 +56,11 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
               <AvatarImage src="https://i.pravatar.cc/150?u=admin" />
               <AvatarFallback>AD</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col text-sm">
+            <div className="hidden md:flex flex-col text-sm">
               <span className="font-bold text-zinc-900">Admin</span>
               <span className="text-xs text-zinc-400 font-medium">Super Admin</span>
             </div>
-            <button className="text-zinc-400 ml-1">
+            <button className="hidden md:block text-zinc-400 ml-1">
               <ArrowDown01Icon className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
           </div>
