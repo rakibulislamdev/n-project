@@ -3,6 +3,7 @@
 import { Notification02Icon, ArrowDown01Icon } from "hugeicons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface PageHeaderProps {
   breadcrumbs: string[];
@@ -12,7 +13,20 @@ interface PageHeaderProps {
 
 export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const { getMeAction } = await import("@/app/actions/auth");
+      const res = await getMeAction();
+      if (res.success && res.data) {
+        setUser(res.data);
+      }
+    }
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -23,6 +37,22 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const getInitials = (name?: string) => {
+    if (!name) return "AD";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    const { logoutAction } = await import("@/app/actions/auth");
+    await logoutAction();
+    router.push("/login"); // Adjust this route if your login page is different
+    router.refresh();
+  };
 
   return (
     <header className="px-4 md:px-8 py-6 flex justify-between items-start gap-4">
@@ -52,13 +82,15 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
             className="flex items-center gap-3 cursor-pointer hover:bg-zinc-50 p-1.5 -m-1.5 rounded-lg transition-colors select-none"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <Avatar className="w-10 h-10 shadow-sm border border-zinc-100">
-              <AvatarImage src="https://i.pravatar.cc/150?u=admin" />
-              <AvatarFallback>AD</AvatarFallback>
+            <Avatar className="w-10 h-10 shadow-sm border border-zinc-200">
+              <AvatarImage src={user?.profileImage || ""} />
+              <AvatarFallback className="font-semibold text-[15px] text-white bg-slate-800">
+                {getInitials(user?.name || "Admin")}
+              </AvatarFallback>
             </Avatar>
             <div className="hidden md:flex flex-col text-sm">
-              <span className="font-bold text-zinc-900">Admin</span>
-              <span className="text-xs text-zinc-400 font-medium">Super Admin</span>
+              <span className="font-bold text-zinc-900">{user?.name || "Admin"}</span>
+              <span className="text-xs text-zinc-400 font-medium">{user?.role?.replace("_", " ") || "Super Admin"}</span>
             </div>
             <button className="hidden md:block text-zinc-400 ml-1">
               <ArrowDown01Icon className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -74,7 +106,10 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
                 Settings
               </button>
               <div className="h-px bg-zinc-100 my-1 mx-2"></div>
-              <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-bold transition-colors">
+              <button 
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-bold transition-colors"
+              >
                 Log out
               </button>
             </div>

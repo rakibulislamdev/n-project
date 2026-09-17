@@ -5,7 +5,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { StarIcon } from "hugeicons-react";
 
 export interface Review {
-  id: number;
+  id: number | string;
   clientName: string;
   clientDate: string;
   clientAvatar: string;
@@ -18,7 +18,7 @@ export interface Review {
 interface ApprovedReviewsRowProps {
   review: Review;
   isSelected: boolean;
-  onToggleSelect: (id: number) => void;
+  onToggleSelect: (id: number | string) => void;
   onRemove: () => void;
 }
 
@@ -36,7 +36,7 @@ export function ApprovedReviewsRow({ review, isSelected, onToggleSelect, onRemov
         <div className="flex items-start gap-4">
           <Avatar className="w-11 h-11 border border-zinc-100 shadow-sm mt-0.5">
             <AvatarImage src={review.clientAvatar} />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>{review.clientName?.slice(0, 2).toUpperCase() || "RV"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-0.5">
             <span className="font-semibold text-[14px] text-zinc-900">{review.clientName}</span>
@@ -57,8 +57,12 @@ export function ApprovedReviewsRow({ review, isSelected, onToggleSelect, onRemov
         </div>
       </TableCell>
       <TableCell className="align-top pt-5 pb-5">
-        <div className="relative w-24 h-16 rounded-xl overflow-hidden shadow-sm">
-          <img src={review.photoMain} alt="Property" className="w-full h-full object-cover" />
+        <div className="relative w-24 h-16 rounded-xl overflow-hidden shadow-sm bg-zinc-100">
+          {review.photoMain ? (
+            <img src={review.photoMain} alt="Review" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xs">No Photo</div>
+          )}
           {review.photoCount > 0 && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs font-bold tracking-wider">
               +{review.photoCount}

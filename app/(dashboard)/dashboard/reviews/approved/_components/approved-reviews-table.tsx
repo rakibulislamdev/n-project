@@ -3,9 +3,9 @@ import { ApprovedReviewsRow, Review } from "./approved-reviews-row";
 
 interface ApprovedReviewsTableProps {
   reviews: Review[];
-  selectedIds: number[];
-  onToggleSelect: (id: number) => void;
-  onRemove: (id: number) => void;
+  selectedIds: (number | string)[];
+  onToggleSelect: (id: number | string) => void;
+  onRemove: (id: number | string) => void;
 }
 
 export function ApprovedReviewsTable({ reviews, selectedIds, onToggleSelect, onRemove }: ApprovedReviewsTableProps) {

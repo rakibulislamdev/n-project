@@ -21,13 +21,22 @@ export const INITIAL_APPROVED_REVIEWS = Array.from({ length: 12 }).map((_, i) =>
   photoCount: 2
 }));
 
-type Review = typeof INITIAL_PENDING_REVIEWS[0];
+export interface ReviewData {
+  id: string | number;
+  clientName: string;
+  clientDate: string;
+  clientAvatar: string;
+  reviewRating: number;
+  reviewText: string;
+  photoMain: string;
+  photoCount: number;
+}
 
 interface ReviewsState {
-  pendingReviews: Review[];
-  approvedReviews: Review[];
-  setPendingReviews: (reviews: Review[] | ((prev: Review[]) => Review[])) => void;
-  setApprovedReviews: (reviews: Review[] | ((prev: Review[]) => Review[])) => void;
+  pendingReviews: ReviewData[];
+  approvedReviews: ReviewData[];
+  setPendingReviews: (reviews: ReviewData[] | ((prev: ReviewData[]) => ReviewData[])) => void;
+  setApprovedReviews: (reviews: ReviewData[] | ((prev: ReviewData[]) => ReviewData[])) => void;
 }
 
 export const useReviewsStore = create<ReviewsState>((set) => ({

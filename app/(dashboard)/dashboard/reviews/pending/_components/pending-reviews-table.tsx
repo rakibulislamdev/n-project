@@ -3,10 +3,10 @@ import { PendingReviewsRow, Review } from "./pending-reviews-row";
 
 interface PendingReviewsTableProps {
   reviews: Review[];
-  selectedIds: number[];
-  onToggleSelect: (id: number) => void;
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
+  selectedIds: (number | string)[];
+  onToggleSelect: (id: number | string) => void;
+  onApprove: (id: number | string) => void;
+  onReject: (id: number | string) => void;
 }
 
 export function PendingReviewsTable({ reviews, selectedIds, onToggleSelect, onApprove, onReject }: PendingReviewsTableProps) {

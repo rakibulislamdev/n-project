@@ -15,10 +15,13 @@ export function ReviewForm({
   setFile: (f: File | null) => void;
   preview: string | null;
 }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Drag and drop state
   const [dragActive, setDragActive] = useState(false);
@@ -49,10 +52,60 @@ export function ReviewForm({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    toast.success("Review submitted successfully!");
+    
+    if (rating === 0) {
+      toast.error("Please provide a rating");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      let photoUrl = "";
+
+      // 1. Upload Image if exists
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
+        
+        const { uploadImageAction } = await import("@/app/actions/review");
+        const uploadRes = await uploadImageAction(formData);
+        
+        if (uploadRes.success) {
+          photoUrl = uploadRes.url;
+        } else {
+          toast.error(uploadRes.message || "Failed to upload image");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // 2. Submit Review
+      const payload = {
+        name,
+        email,
+        rating,
+        review: reviewText,
+        photo: photoUrl || undefined
+      };
+
+      const { submitReviewAction } = await import("@/app/actions/review");
+      const submitRes = await submitReviewAction(payload);
+
+      if (submitRes.success) {
+        toast.success(submitRes.message || "Review submitted successfully!");
+        setIsSubmitted(true);
+      } else {
+        toast.error(submitRes.message || "Failed to submit review");
+      }
+    } catch (error) {
+      console.error("Submit Error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -82,6 +135,8 @@ export function ReviewForm({
           <Input
             required
             placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
           />
         </div>
@@ -93,6 +148,8 @@ export function ReviewForm({
             required
             type="email"
             placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
           />
         </div>
@@ -170,9 +227,22 @@ export function ReviewForm({
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full h-12 sm:h-14 bg-foreground text-background hover:bg-foreground/90 mt-1 sm:mt-2 rounded-xl text-sm sm:text-base font-semibold group flex items-center justify-center gap-2">
-          <SubmitIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-          Submit Review
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="w-full h-12 sm:h-14 bg-foreground text-background hover:bg-foreground/90 mt-1 sm:mt-2 rounded-xl text-sm sm:text-base font-semibold group flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin"></span>
+              Submitting...
+            </span>
+          ) : (
+            <>
+              <SubmitIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+              Submit Review
+            </>
+          )}
         </Button>
       </form>
 
