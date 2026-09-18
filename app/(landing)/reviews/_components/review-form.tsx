@@ -95,14 +95,14 @@ export function ReviewForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (rating === 0) {
       toast.error("Please provide a rating");
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       let photoUrl = "";
       let propertyPhotoUrls: string[] = [];
@@ -111,9 +111,9 @@ export function ReviewForm({
       if (file) {
         const formData = new FormData();
         formData.append("image", file);
-        
+
         const uploadRes = await uploadImageAction(formData);
-        
+
         if (uploadRes.success) {
           photoUrl = uploadRes.url;
         } else {
@@ -127,9 +127,9 @@ export function ReviewForm({
       if (propertyFiles.length > 0) {
         const formData = new FormData();
         propertyFiles.forEach(f => {
-          formData.append("images", f); 
+          formData.append("images", f);
         });
-        
+
         const uploadRes = await uploadMultipleImagesAction(formData);
         if (uploadRes.success && uploadRes.urls) {
           propertyPhotoUrls = uploadRes.urls;
@@ -169,7 +169,7 @@ export function ReviewForm({
   if (isSubmitted) {
     return (
       <div className="bg-background rounded-2xl shadow-xl w-full p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] h-full font-inter text-center">
-        <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold italic text-foreground mb-4">Thanks you</h2>
+        <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold italic text-foreground mb-4">Thank you</h2>
         <p className="text-sm text-foreground/60 italic font-serif">For taking the time to share your experience!</p>
       </div>
     );
@@ -274,7 +274,7 @@ export function ReviewForm({
                 <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-secondary group/image">
                   <img src={preview} alt="Upload preview" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/image:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
+                    <button
                       type="button"
                       className="p-1 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
                       onClick={(e) => {
@@ -338,7 +338,7 @@ export function ReviewForm({
                     <div key={i} className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-md overflow-hidden bg-secondary group/prop">
                       <img src={url} alt={`Property preview ${i + 1}`} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/prop:opacity-100 transition-opacity flex items-center justify-center">
-                        <button 
+                        <button
                           type="button"
                           className="p-1 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
                           onClick={(e) => {
@@ -365,8 +365,8 @@ export function ReviewForm({
         </div>
 
         {/* Submit Button */}
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={isSubmitting}
           className="w-full h-12 sm:h-14 bg-foreground text-background hover:bg-foreground/90 mt-1 sm:mt-2 rounded-xl text-sm sm:text-base font-semibold group flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
