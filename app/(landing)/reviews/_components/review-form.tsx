@@ -75,7 +75,15 @@ export function ReviewForm({
     e.stopPropagation();
     setPropDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setPropertyFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)]);
+      const newFiles = Array.from(e.dataTransfer.files);
+      setPropertyFiles((prev) => {
+        const totalFiles = [...prev, ...newFiles];
+        if (totalFiles.length > 5) {
+          toast.warning("You can only upload up to 5 property images.");
+          return totalFiles.slice(0, 5);
+        }
+        return totalFiles;
+      });
     }
   };
 
@@ -89,7 +97,17 @@ export function ReviewForm({
   const handlePropChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files.length > 0) {
-      setPropertyFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+      const newFiles = Array.from(e.target.files);
+      setPropertyFiles((prev) => {
+        const totalFiles = [...prev, ...newFiles];
+        if (totalFiles.length > 5) {
+          toast.warning("You can only upload up to 5 property images.");
+          return totalFiles.slice(0, 5);
+        }
+        return totalFiles;
+      });
+      // Clear input value so same files can be re-selected if needed
+      e.target.value = "";
     }
   };
 
