@@ -12,7 +12,7 @@ interface PendingReviewsClientProps {
 }
 
 export default function PendingReviewsClient({ initialReviews }: PendingReviewsClientProps) {
-  const { pendingReviews: reviews, setPendingReviews: setReviews } = useReviewsStore();
+  const { pendingReviews: reviews, setPendingReviews: setReviews, setApprovedReviews } = useReviewsStore();
   const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 4;
@@ -55,8 +55,14 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
       const res = await updateReviewStatusAction(id, status);
       
       if (res.success) {
+        const reviewToMove = reviews.find(r => r.id === id);
+        
         setReviews(prev => prev.filter(r => r.id !== id));
         setSelectedIds(prev => prev.filter(item => item !== id));
+        
+        if (status === "APPROVED" && reviewToMove) {
+          setApprovedReviews(prev => [reviewToMove, ...prev]);
+        }
 
         if (currentReviews.length === 1 && currentPage > 1) {
           setCurrentPage(prev => prev - 1);
@@ -86,9 +92,14 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
       }
       
       if (successCount > 0) {
-        const successfulIds = selectedIds.slice(0, successCount); // Simplification, assuming all succeeded if count > 0 for this demo
+        const reviewsToMove = reviews.filter(r => selectedIds.includes(r.id));
+        
         setReviews(prev => prev.filter(r => !selectedIds.includes(r.id)));
         setSelectedIds([]);
+        
+        if (status === "APPROVED") {
+          setApprovedReviews(prev => [...reviewsToMove, ...prev]);
+        }
 
         const remainingAfterRemove = reviews.length - selectedIds.length;
         const newTotalPages = Math.ceil(remainingAfterRemove / ITEMS_PER_PAGE) || 1;

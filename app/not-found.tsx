@@ -11,12 +11,12 @@ export default function NotFound() {
       <p className="text-zinc-500 font-medium max-w-md mx-auto mb-10 text-[15px]">
         The page you are looking for doesn't exist or has been moved. Let's get you back on track.
       </p>
-      <Link 
-        href="/dashboard/reviews/pending" 
+      <Link
+        href="/"
         className="bg-black hover:bg-zinc-800 text-white px-8 h-12 rounded-full font-semibold text-[14px] flex items-center justify-center gap-2 shadow-md transition-all"
       >
         <Home01Icon className="w-5 h-5" />
-        Return to Dashboard
+        Return to Home
       </Link>
     </div>
   );

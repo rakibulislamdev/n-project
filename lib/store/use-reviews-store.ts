@@ -7,8 +7,7 @@ export interface ReviewData {
   clientAvatar: string;
   reviewRating: number;
   reviewText: string;
-  photoMain: string;
-  photoCount: number;
+  propertyImages: string[];
 }
 
 interface ReviewsState {

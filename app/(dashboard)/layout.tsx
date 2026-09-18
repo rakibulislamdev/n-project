@@ -26,8 +26,7 @@ export default async function DashboardLayout({
         clientAvatar: r.photo || "",
         reviewRating: r.rating,
         reviewText: r.review,
-        photoMain: r.photo || "",
-        photoCount: 0
+        propertyImages: r.propertyImages || []
       }));
   }
 
@@ -40,8 +39,7 @@ export default async function DashboardLayout({
       clientAvatar: r.photo || "",
       reviewRating: r.rating,
       reviewText: r.review,
-      photoMain: r.photo || "",
-      photoCount: 0
+      propertyImages: r.propertyImages || []
     }));
   }
 
