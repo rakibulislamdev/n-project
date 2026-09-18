@@ -48,7 +48,7 @@ export default function ReviewsPage() {
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12 items-stretch justify-center">
           {/* Left Column: Profile Card */}
           <div className="w-full md:w-[340px] lg:w-[400px] flex-shrink-0 flex flex-col">
-            <ProfileCard previewImage={preview} />
+            <ProfileCard />
           </div>
 
           {/* Right Column: Review Form */}

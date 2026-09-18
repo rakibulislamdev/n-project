@@ -1,25 +1,17 @@
 import Image from "next/image";
 import { ProfileHomeIcon, ProfileStarIcon, ProfileTrustedIcon } from "@/lib/icons";
 
-export function ProfileCard({ previewImage }: { previewImage?: string | null }) {
+export function ProfileCard() {
   return (
     <div className="bg-background rounded-2xl shadow-xl overflow-hidden w-full max-w-md mx-auto md:mx-0 flex flex-col font-inter h-full">
       {/* Photo */}
       <div className="relative w-full min-h-[280px] sm:min-h-[350px] md:min-h-[300px] lg:min-h-[450px] flex-1 bg-secondary">
-        {previewImage ? (
-          <img
-            src={previewImage}
-            alt="Uploaded Preview"
-            className="w-full h-full object-cover object-top absolute inset-0"
-          />
-        ) : (
-          <Image
-            src="/review-page-avatar.png"
-            alt="Nader Ayoub"
-            fill
-            className="object-cover object-top"
-          />
-        )}
+        <Image
+          src="/review-page-avatar.png"
+          alt="Nader Ayoub"
+          fill
+          className="object-cover object-top"
+        />
       </div>
 
       {/* Details */}

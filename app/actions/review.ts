@@ -30,6 +30,36 @@ export async function uploadImageAction(formData: FormData) {
   }
 }
 
+export async function uploadMultipleImagesAction(formData: FormData) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    const response = await fetch(`${baseUrl}/upload/multiple`, {
+      method: "POST",
+      headers: {
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+      },
+      body: formData,
+    });
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // Handle array of strings or array of objects with url property
+      const urls = Array.isArray(data.data) 
+        ? data.data.map((item: any) => item.url || item) 
+        : (data.data.urls || data.data);
+      return { success: true, urls };
+    }
+
+    return { success: false, message: data.message || "Failed to upload images" };
+  } catch (error) {
+    console.error("Multiple Upload Error:", error);
+    return { success: false, message: "An error occurred during upload." };
+  }
+}
+
 export async function submitReviewAction(payload: any) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;

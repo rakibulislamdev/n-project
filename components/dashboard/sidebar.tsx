@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useReviewsStore } from "@/lib/store/use-reviews-store";
 import { useSidebarStore } from "@/lib/store/use-sidebar-store";
@@ -14,15 +14,24 @@ import {
   ArrowDown01Icon,
   HourglassIcon,
   ValidationApprovalIcon,
-  SidebarRightIcon
+  SidebarRightIcon,
+  Logout01Icon
 } from "hugeicons-react";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isReviewsOpen, setIsReviewsOpen] = useState(true);
   const { pendingReviews, approvedReviews } = useReviewsStore();
   const { isMobileOpen, setIsMobileOpen } = useSidebarStore();
+
+  const handleLogout = async () => {
+    const { logoutAction } = await import("@/app/actions/auth");
+    await logoutAction();
+    router.push("/login");
+    router.refresh();
+  };
 
   const isExpanded = isSidebarOpen || isMobileOpen;
 
@@ -149,6 +158,19 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        {/* Logout Button */}
+        <div className="mt-auto px-6 py-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full transition-colors hover:text-red-500 group cursor-pointer"
+          >
+            <Logout01Icon className="w-[18px] h-[18px] shrink-0" />
+            <span className={`font-medium text-[14px] whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? "max-w-[120px] ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>
+              Log out
+            </span>
+          </button>
+        </div>
       </div>
     </>
   );

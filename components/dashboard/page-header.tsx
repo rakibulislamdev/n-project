@@ -1,9 +1,10 @@
 "use client";
 
-import { Notification02Icon, ArrowDown01Icon } from "hugeicons-react";
+import { Notification02Icon, ArrowDown01Icon, CheckmarkCircle01Icon, Delete01Icon } from "hugeicons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface PageHeaderProps {
   breadcrumbs: string[];
@@ -13,8 +14,11 @@ interface PageHeaderProps {
 
 export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,10 +32,48 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
     fetchUser();
   }, []);
 
+  const previousNotifIds = useRef<Set<string | number>>(new Set());
+
+  useEffect(() => {
+    async function fetchNotifications() {
+      const { getNotificationsAction } = await import("@/app/actions/notification");
+      const res = await getNotificationsAction();
+      if (res.success && res.data) {
+        setNotifications((prev) => {
+          // Detect new notifications if we already had some data loaded previously
+          if (previousNotifIds.current.size > 0) {
+            const newNotifs = res.data.filter((n: any) => !previousNotifIds.current.has(n.id));
+            if (newNotifs.length > 0) {
+              newNotifs.forEach((n: any) => {
+                toast("New Notification", {
+                  description: n.message,
+                  icon: <Notification02Icon className="w-4 h-4 text-primary" />,
+                });
+              });
+              // Refresh the dashboard data (like pending reviews) so they appear without manual reload
+              router.refresh();
+            }
+          }
+          // Update the ref with current IDs
+          previousNotifIds.current = new Set(res.data.map((n: any) => n.id));
+          return res.data;
+        });
+      }
+    }
+    fetchNotifications();
+
+    // Poll every 5 seconds for near-instant updates
+    const interval = setInterval(fetchNotifications, 5000);
+    return () => clearInterval(interval);
+  }, [router]);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setIsNotifOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -54,6 +96,29 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
     router.refresh();
   };
 
+  const handleMarkRead = async (id: string | number) => {
+    const { markNotificationReadAction } = await import("@/app/actions/notification");
+    const res = await markNotificationReadAction(id);
+    if (res.success) {
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const handleDeleteNotif = async (id: string | number) => {
+    const { deleteNotificationAction } = await import("@/app/actions/notification");
+    const res = await deleteNotificationAction(id);
+    if (res.success) {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+      toast.success("Notification deleted");
+    } else {
+      toast.error(res.message);
+    }
+  };
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   return (
     <header className="px-4 md:px-8 py-6 flex justify-between items-start gap-4">
       <div className="flex-1 min-w-0">
@@ -73,10 +138,49 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
         <p className="text-zinc-500 text-sm truncate">{description}</p>
       </div>
       <div className="flex items-center gap-4 md:gap-6 shrink-0 -mt-3 md:-mt-4">
-        <button className="relative">
-          <Notification02Icon className="w-6 h-6 text-zinc-500" />
-          <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        <div className="relative" ref={notifRef}>
+          <button 
+            className="relative p-2 -m-2 rounded-full hover:bg-zinc-100 transition-colors"
+            onClick={() => setIsNotifOpen(!isNotifOpen)}
+          >
+            <Notification02Icon className="w-6 h-6 text-zinc-500" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+            )}
+          </button>
+
+          {isNotifOpen && (
+            <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border border-zinc-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+              <div className="px-4 py-2 border-b border-zinc-100 mb-2">
+                <h3 className="font-bold text-zinc-900">Notifications</h3>
+              </div>
+              <div className="max-h-80 overflow-y-auto">
+                {notifications.length === 0 ? (
+                  <p className="text-zinc-500 text-sm text-center py-6">No new notifications</p>
+                ) : (
+                  notifications.map((notif: any) => (
+                    <div key={notif.id} className={`px-4 py-3 border-b border-zinc-50 last:border-0 hover:bg-zinc-50 transition-colors flex gap-3 ${!notif.isRead ? 'bg-blue-50/50' : ''}`}>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-zinc-800 font-medium break-words">{notif.message}</p>
+                        <p className="text-xs text-zinc-400 mt-1">{new Date(notif.createdAt || Date.now()).toLocaleString()}</p>
+                      </div>
+                      <div className="flex flex-col gap-2 shrink-0">
+                        {!notif.isRead && (
+                          <button onClick={() => handleMarkRead(notif.id)} title="Mark as read" className="text-blue-500 hover:text-blue-700 p-1">
+                            <CheckmarkCircle01Icon className="w-4 h-4" />
+                          </button>
+                        )}
+                        <button onClick={() => handleDeleteNotif(notif.id)} title="Delete" className="text-zinc-400 hover:text-red-500 p-1">
+                          <Delete01Icon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
         <div className="relative" ref={dropdownRef}>
           <div 
             className="flex items-center gap-3 cursor-pointer hover:bg-zinc-50 p-1.5 -m-1.5 rounded-lg transition-colors select-none"

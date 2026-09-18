@@ -19,36 +19,36 @@ export async function loginAction(values: any) {
     if (response.ok && data.success) {
       const cookieStore = await cookies();
       const rememberMe = values.rememberMe === true;
-      
+
       const cookieOptions = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         path: "/",
         ...(rememberMe && { maxAge: 60 * 60 * 24 * 30 }), // 30 days if rememberMe
       };
-      
+
       cookieStore.set("accessToken", data.data.accessToken, cookieOptions);
       cookieStore.set("refreshToken", data.data.refreshToken, cookieOptions);
       cookieStore.set("user", JSON.stringify(data.data.user), {
         path: "/",
         ...(rememberMe && { maxAge: 60 * 60 * 24 * 30 }),
       });
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         message: data.message || "Login successful"
       };
     } else {
-      return { 
-        success: false, 
-        message: data.message || "Failed to login. Please check your credentials." 
+      return {
+        success: false,
+        message: "Invalid email or password."
       };
     }
   } catch (error) {
     console.error("Server Action Login Error:", error);
-    return { 
-      success: false, 
-      message: "An error occurred during login. Please try again later." 
+    return {
+      success: false,
+      message: "An error occurred during login. Please try again later."
     };
   }
 }
@@ -76,22 +76,22 @@ export async function getMeAction() {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      return { 
-        success: true, 
+      return {
+        success: true,
         message: data.message || "User fetched successfully",
         data: data.data as User
       };
     } else {
-      return { 
-        success: false, 
+      return {
+        success: false,
         message: data.message || "Failed to fetch user profile",
         data: null
       };
     }
   } catch (error) {
     console.error("Server Action getMe Error:", error);
-    return { 
-      success: false, 
+    return {
+      success: false,
       message: "An error occurred while fetching user profile.",
       data: null
     };
@@ -125,7 +125,7 @@ export async function logoutAction() {
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
     cookieStore.delete("user");
-    
+
     return { success: false, message: "An error occurred during logout." };
   }
 }

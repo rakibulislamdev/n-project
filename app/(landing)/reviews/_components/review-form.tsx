@@ -10,6 +10,7 @@ import { StarIcon, StarOutlineIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from 
 export function ReviewForm({
   file,
   setFile,
+  preview,
 }: {
   file: File | null;
   setFile: (f: File | null) => void;
@@ -22,9 +23,21 @@ export function ReviewForm({
   const [reviewText, setReviewText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [propertyFiles, setPropertyFiles] = useState<File[]>([]);
+  const [propertyPreviews, setPropertyPreviews] = useState<string[]>([]);
 
-  // Drag and drop state
+  useEffect(() => {
+    const urls = propertyFiles.map((f) => URL.createObjectURL(f));
+    setPropertyPreviews(urls);
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [propertyFiles]);
+
+  // Drag and drop state for primary photo
   const [dragActive, setDragActive] = useState(false);
+  // Drag and drop state for property photos
+  const [propDragActive, setPropDragActive] = useState(false);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -33,6 +46,16 @@ export function ReviewForm({
       setDragActive(true);
     } else if (e.type === "dragleave") {
       setDragActive(false);
+    }
+  };
+
+  const handlePropDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setPropDragActive(true);
+    } else if (e.type === "dragleave") {
+      setPropDragActive(false);
     }
   };
 
@@ -45,10 +68,26 @@ export function ReviewForm({
     }
   };
 
+  const handlePropDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPropDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setPropertyFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)]);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+    }
+  };
+
+  const handlePropChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files.length > 0) {
+      setPropertyFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
     }
   };
 
@@ -64,8 +103,9 @@ export function ReviewForm({
     
     try {
       let photoUrl = "";
+      let propertyPhotoUrls: string[] = [];
 
-      // 1. Upload Image if exists
+      // 1. Upload primary image if exists
       if (file) {
         const formData = new FormData();
         formData.append("image", file);
@@ -82,13 +122,32 @@ export function ReviewForm({
         }
       }
 
+      // 1.5 Upload property images if exist
+      if (propertyFiles.length > 0) {
+        const { uploadMultipleImagesAction } = await import("@/app/actions/review");
+        const formData = new FormData();
+        propertyFiles.forEach(f => {
+          formData.append("image", f);
+        });
+        
+        const uploadRes = await uploadMultipleImagesAction(formData);
+        if (uploadRes.success && uploadRes.urls) {
+          propertyPhotoUrls = uploadRes.urls;
+        } else {
+          toast.error(uploadRes.message || "Failed to upload property images");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       // 2. Submit Review
       const payload = {
         name,
         email,
         rating,
         review: reviewText,
-        photo: photoUrl || undefined
+        photo: photoUrl || undefined,
+        propertyImages: propertyPhotoUrls.length > 0 ? propertyPhotoUrls : undefined
       };
 
       const { submitReviewAction } = await import("@/app/actions/review");
@@ -194,9 +253,9 @@ export function ReviewForm({
 
         {/* Photo Upload */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-semibold text-foreground">Add a Photo (Optional)</label>
+          <label className="text-xs font-semibold text-foreground">Upload your photo (Optional)</label>
           <div
-            className={`relative border border-dashed rounded-xl p-5 sm:p-8 flex flex-col items-center justify-center gap-2 transition-colors cursor-pointer group ${dragActive ? "border-primary bg-primary/5" : "border-border bg-secondary/20 hover:bg-secondary/40"
+            className={`relative border border-dashed rounded-xl p-3 sm:p-4 flex items-center justify-center transition-colors cursor-pointer group ${dragActive ? "border-primary bg-primary/5" : "border-border bg-secondary/20 hover:bg-secondary/40"
               }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -211,17 +270,73 @@ export function ReviewForm({
               accept="image/png, image/jpeg"
               onChange={handleChange}
             />
-            {file ? (
-              <div className="flex flex-col items-center gap-2 text-center">
-                <UploadIcon className="w-8 h-8 text-primary transition-colors" />
-                <p className="text-sm text-foreground/80 font-medium break-all px-4">{file.name}</p>
+            {file && preview ? (
+              <div className="flex items-center gap-3 w-full">
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-secondary">
+                  <img src={preview} alt="Upload preview" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <UploadIcon className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <div className="flex flex-col text-left overflow-hidden">
+                  <p className="text-xs sm:text-sm font-medium text-foreground truncate">{file.name}</p>
+                  <p className="text-[10px] sm:text-xs text-foreground/50 mt-0.5">Click or drag to change</p>
+                </div>
               </div>
             ) : (
-              <>
-                <UploadIcon className={`w-8 h-8 transition-colors ${dragActive ? "text-primary" : "text-foreground/40 group-hover:text-foreground/60"}`} />
-                <p className="text-sm text-foreground/80 font-medium">Click to upload <span className="font-normal text-foreground/60">or drag and drop</span></p>
-                <p className="text-xs text-foreground/40">JPG, PNG, (Max 5MB)</p>
-              </>
+              <div className="flex items-center gap-2">
+                <UploadIcon className={`w-5 h-5 transition-colors ${dragActive ? "text-primary" : "text-foreground/40 group-hover:text-foreground/60"}`} />
+                <p className="text-xs sm:text-sm text-foreground/80 font-medium">
+                  Click to upload <span className="font-normal text-foreground/60 hidden sm:inline">or drag and drop</span>
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Property Photo Upload */}
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-semibold text-foreground">Upload property photo (Optional)</label>
+          <div
+            className={`relative border border-dashed rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center transition-colors cursor-pointer group ${propDragActive ? "border-primary bg-primary/5" : "border-border bg-secondary/20 hover:bg-secondary/40"
+              }`}
+            onDragEnter={handlePropDrag}
+            onDragLeave={handlePropDrag}
+            onDragOver={handlePropDrag}
+            onDrop={handlePropDrop}
+            onClick={() => document.getElementById("property-photo-upload")?.click()}
+          >
+            <input
+              id="property-photo-upload"
+              type="file"
+              multiple
+              className="hidden"
+              accept="image/png, image/jpeg"
+              onChange={handlePropChange}
+            />
+            {propertyPreviews.length > 0 ? (
+              <div className="flex flex-col gap-2 w-full">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs sm:text-sm text-foreground/80 font-medium">
+                    {propertyFiles.length} {propertyFiles.length === 1 ? 'file' : 'files'} selected
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-foreground/50">Click to add/change</p>
+                </div>
+                <div className="flex flex-wrap gap-2 w-full">
+                  {propertyPreviews.map((url, i) => (
+                    <div key={i} className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-md overflow-hidden bg-secondary">
+                      <img src={url} alt={`Property preview ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <UploadIcon className={`w-5 h-5 transition-colors ${propDragActive ? "text-primary" : "text-foreground/40 group-hover:text-foreground/60"}`} />
+                <p className="text-xs sm:text-sm text-foreground/80 font-medium">
+                  Click to upload <span className="font-normal text-foreground/60 hidden sm:inline">or drag and drop</span>
+                </p>
+              </div>
             )}
           </div>
         </div>
