@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { StarIcon, StarOutlineIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
 import { Cancel01Icon } from "hugeicons-react";
+import { submitReviewAction, uploadImageAction, uploadMultipleImagesAction } from "@/app/actions/review";
 
 export function ReviewForm({
   file,
@@ -111,7 +112,6 @@ export function ReviewForm({
         const formData = new FormData();
         formData.append("image", file);
         
-        const { uploadImageAction } = await import("@/app/actions/review");
         const uploadRes = await uploadImageAction(formData);
         
         if (uploadRes.success) {
@@ -125,7 +125,6 @@ export function ReviewForm({
 
       // 1.5 Upload property images if exist
       if (propertyFiles.length > 0) {
-        const { uploadMultipleImagesAction } = await import("@/app/actions/review");
         const formData = new FormData();
         propertyFiles.forEach(f => {
           formData.append("images", f); 
@@ -151,7 +150,6 @@ export function ReviewForm({
         propertyImages: propertyPhotoUrls.length > 0 ? propertyPhotoUrls : undefined
       };
 
-      const { submitReviewAction } = await import("@/app/actions/review");
       const submitRes = await submitReviewAction(payload);
 
       if (submitRes.success) {

@@ -6,6 +6,7 @@ import { useReviewsStore, ReviewData } from "@/lib/store/use-reviews-store";
 import { ApprovedReviewsTable } from "./approved-reviews-table";
 import { ApprovedReviewsFooter } from "./approved-reviews-footer";
 import { toast } from "sonner";
+import { updateReviewStatusAction } from "@/app/actions/review";
 import {
   Dialog,
   DialogContent,
@@ -59,7 +60,6 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
   const handleRemove = async (id: number | string) => {
     setIsLoading(true);
     try {
-      const { updateReviewStatusAction } = await import("@/app/actions/review");
       // Assuming REJECTED or REMOVED is the status for removing from approved list
       const res = await updateReviewStatusAction(id, "REJECTED");
       
@@ -87,7 +87,6 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
     let successCount = 0;
     
     try {
-      const { updateReviewStatusAction } = await import("@/app/actions/review");
       for (const id of selectedIds) {
         const res = await updateReviewStatusAction(id, "REJECTED");
         if (res.success) successCount++;

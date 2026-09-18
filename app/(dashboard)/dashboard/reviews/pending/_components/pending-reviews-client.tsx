@@ -6,6 +6,7 @@ import { useReviewsStore, ReviewData } from "@/lib/store/use-reviews-store";
 import { PendingReviewsTable } from "./pending-reviews-table";
 import { PendingReviewsFooter } from "./pending-reviews-footer";
 import { toast } from "sonner";
+import { updateReviewStatusAction } from "@/app/actions/review";
 import {
   Dialog,
   DialogContent,
@@ -61,7 +62,6 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
     const status = actionType === "approve" ? "APPROVED" : "REJECTED";
     
     try {
-      const { updateReviewStatusAction } = await import("@/app/actions/review");
       const res = await updateReviewStatusAction(id, status);
       
       if (res.success) {
@@ -94,7 +94,6 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
     let successCount = 0;
     
     try {
-      const { updateReviewStatusAction } = await import("@/app/actions/review");
       // For batch, we could ideally use a batch endpoint, but we loop for now
       for (const id of selectedIds) {
         const res = await updateReviewStatusAction(id, status);
