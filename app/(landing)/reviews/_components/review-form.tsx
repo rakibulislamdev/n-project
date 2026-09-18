@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { StarIcon, StarOutlineIcon, SafeInfoIcon, UploadIcon, SubmitIcon } from "@/lib/icons";
+import { Cancel01Icon } from "hugeicons-react";
 
 export function ReviewForm({
   file,
@@ -127,7 +128,7 @@ export function ReviewForm({
         const { uploadMultipleImagesAction } = await import("@/app/actions/review");
         const formData = new FormData();
         propertyFiles.forEach(f => {
-          formData.append("image", f);
+          formData.append("images", f); 
         });
         
         const uploadRes = await uploadMultipleImagesAction(formData);
@@ -272,10 +273,22 @@ export function ReviewForm({
             />
             {file && preview ? (
               <div className="flex items-center gap-3 w-full">
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-secondary">
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-secondary group/image">
                   <img src={preview} alt="Upload preview" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <UploadIcon className="w-4 h-4 text-white" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/image:opacity-100 transition-opacity flex items-center justify-center">
+                    <button 
+                      type="button"
+                      className="p-1 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFile(null);
+                        // Also clear the file input value so selecting the same file again triggers onChange
+                        const input = document.getElementById("photo-upload") as HTMLInputElement;
+                        if (input) input.value = "";
+                      }}
+                    >
+                      <Cancel01Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </button>
                   </div>
                 </div>
                 <div className="flex flex-col text-left overflow-hidden">
@@ -324,8 +337,20 @@ export function ReviewForm({
                 </div>
                 <div className="flex flex-wrap gap-2 w-full">
                   {propertyPreviews.map((url, i) => (
-                    <div key={i} className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-md overflow-hidden bg-secondary">
+                    <div key={i} className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-md overflow-hidden bg-secondary group/prop">
                       <img src={url} alt={`Property preview ${i + 1}`} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/prop:opacity-100 transition-opacity flex items-center justify-center">
+                        <button 
+                          type="button"
+                          className="p-1 bg-red-500/80 hover:bg-red-500 rounded-full text-white transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPropertyFiles(prev => prev.filter((_, idx) => idx !== i));
+                          }}
+                        >
+                          <Cancel01Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>

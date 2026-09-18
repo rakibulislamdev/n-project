@@ -14,6 +14,7 @@
     "@radix-ui/react-slot": "^1.3.3",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.3.0",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^13.3.0",
     "hugeicons-react": "^0.4.0",
     "koro": "^1.0.1",

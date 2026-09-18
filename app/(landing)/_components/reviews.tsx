@@ -121,7 +121,7 @@ export function Reviews({ initialReviews }: { initialReviews?: Review[] }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="col-span-full text-center py-12 text-muted-foreground"
+                className="w-full flex items-center justify-center py-12 text-muted-foreground"
               >
                 No reviews found for this category.
               </motion.div>

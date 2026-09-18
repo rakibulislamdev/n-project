@@ -22,8 +22,7 @@ export default async function PendingReviewsPage() {
       clientAvatar: r.photo || "",
       reviewRating: r.rating,
       reviewText: r.review,
-      photoMain: r.photo || "",
-      photoCount: 0
+      propertyImages: r.propertyImages || []
     }));
   }
 

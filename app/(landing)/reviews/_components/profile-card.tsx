@@ -5,7 +5,7 @@ export function ProfileCard() {
   return (
     <div className="bg-background rounded-2xl shadow-xl overflow-hidden w-full max-w-md mx-auto md:mx-0 flex flex-col font-inter h-full">
       {/* Photo */}
-      <div className="relative w-full min-h-[280px] sm:min-h-[350px] md:min-h-[300px] lg:min-h-[450px] flex-1 bg-secondary">
+      <div className="relative w-full h-[220px] sm:h-[280px] md:h-[320px] shrink-0 bg-secondary">
         <Image
           src="/review-page-avatar.png"
           alt="Nader Ayoub"

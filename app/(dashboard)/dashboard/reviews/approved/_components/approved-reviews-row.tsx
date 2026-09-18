@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { StarIcon } from "hugeicons-react";
+import { ReviewPhotoGallery } from "../../_components/review-photo-gallery";
 
 export interface Review {
   id: number | string;
@@ -11,8 +12,7 @@ export interface Review {
   clientAvatar: string;
   reviewRating: number;
   reviewText: string;
-  photoMain: string;
-  photoCount: number;
+  propertyImages: string[];
 }
 
 interface ApprovedReviewsRowProps {
@@ -58,16 +58,7 @@ export function ApprovedReviewsRow({ review, isSelected, onToggleSelect, onRemov
       </TableCell>
       <TableCell className="align-top pt-5 pb-5">
         <div className="relative w-24 h-16 rounded-xl overflow-hidden shadow-sm bg-zinc-100">
-          {review.photoMain ? (
-            <img src={review.photoMain} alt="Review" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xs">No Photo</div>
-          )}
-          {review.photoCount > 0 && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs font-bold tracking-wider">
-              +{review.photoCount}
-            </div>
-          )}
+          <ReviewPhotoGallery propertyImages={review.propertyImages} />
         </div>
       </TableCell>
       <TableCell className="text-right pr-6 align-top pt-7">
