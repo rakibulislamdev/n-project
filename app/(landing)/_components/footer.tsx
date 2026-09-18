@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ScrollDiv } from "@/components/scroll-animation";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, XIcon } from "@/lib/icons";
 import Image from "next/image";
 
 export function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer className="w-full bg-background font-inter pb-8 pt-12 md:pt-16">
       <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex flex-col gap-10 md:gap-12">
@@ -37,11 +42,13 @@ export function Footer() {
               </p>
             </div>
 
-            <Link href="/reviews">
-              <Button variant="default" size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-medium">
-                Write a Review
-              </Button>
-            </Link>
+            {pathname !== "/reviews" && (
+              <Link href="/reviews">
+                <Button variant="default" size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-medium">
+                  Write a Review
+                </Button>
+              </Link>
+            )}
           </div>
         </ScrollDiv>
 
