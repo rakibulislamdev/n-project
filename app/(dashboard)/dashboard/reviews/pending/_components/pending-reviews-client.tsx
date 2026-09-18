@@ -6,6 +6,15 @@ import { useReviewsStore, ReviewData } from "@/lib/store/use-reviews-store";
 import { PendingReviewsTable } from "./pending-reviews-table";
 import { PendingReviewsFooter } from "./pending-reviews-footer";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface PendingReviewsClientProps {
   initialReviews: ReviewData[];
@@ -45,6 +54,7 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
   };
 
   const [isLoading, setIsLoading] = useState(false);
+  const [rejectAction, setRejectAction] = useState<{ type: 'single', id: number | string } | { type: 'batch' } | null>(null);
 
   const handleAction = async (id: number | string, actionType: "approve" | "reject") => {
     setIsLoading(true);
@@ -132,7 +142,7 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
             handleAction(id, "approve");
           }}
           onReject={(id) => {
-            handleAction(id, "reject");
+            setRejectAction({ type: 'single', id });
           }}
         />
 
@@ -148,10 +158,40 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
             handleBatchAction("approve");
           }}
           onRejectSelected={() => {
-            handleBatchAction("reject");
+            setRejectAction({ type: 'batch' });
           }}
         />
       </div>
+
+      <Dialog open={!!rejectAction} onOpenChange={(open) => !open && setRejectAction(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure you want to reject?</DialogTitle>
+            <DialogDescription>
+              This action will reject the selected {rejectAction?.type === 'batch' ? 'reviews' : 'review'}. The {rejectAction?.type === 'batch' ? 'reviews' : 'review'} will be moved to the rejected state and will not be displayed on the website.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="bg-transparent border-none">
+            <Button variant="outline" onClick={() => setRejectAction(null)} disabled={isLoading}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={() => {
+                if (rejectAction?.type === 'single') {
+                  handleAction(rejectAction.id, "reject").then(() => setRejectAction(null));
+                } else if (rejectAction?.type === 'batch') {
+                  handleBatchAction("reject").then(() => setRejectAction(null));
+                }
+              }}
+              disabled={isLoading}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              {isLoading ? "Rejecting..." : "Reject"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

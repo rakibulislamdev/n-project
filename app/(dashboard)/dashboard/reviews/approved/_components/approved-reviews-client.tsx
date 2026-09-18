@@ -6,6 +6,15 @@ import { useReviewsStore, ReviewData } from "@/lib/store/use-reviews-store";
 import { ApprovedReviewsTable } from "./approved-reviews-table";
 import { ApprovedReviewsFooter } from "./approved-reviews-footer";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface ApprovedReviewsClientProps {
   initialReviews: ReviewData[];
@@ -45,6 +54,7 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
   };
 
   const [isLoading, setIsLoading] = useState(false);
+  const [removeAction, setRemoveAction] = useState<{ type: 'single', id: number | string } | { type: 'batch' } | null>(null);
 
   const handleRemove = async (id: number | string) => {
     setIsLoading(true);
@@ -114,7 +124,7 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
           reviews={currentReviews}
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
-          onRemove={handleRemove}
+          onRemove={(id) => setRemoveAction({ type: 'single', id })}
         />
 
         <ApprovedReviewsFooter
@@ -125,9 +135,39 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
-          onRemoveSelected={handleRemoveSelected}
+          onRemoveSelected={() => setRemoveAction({ type: 'batch' })}
         />
       </div>
+
+      <Dialog open={!!removeAction} onOpenChange={(open) => !open && setRemoveAction(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action will remove the selected {removeAction?.type === 'batch' ? 'reviews' : 'review'}. The {removeAction?.type === 'batch' ? 'reviews' : 'review'} will be rejected and no longer visible on the website.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="bg-transparent border-none">
+            <Button variant="outline" onClick={() => setRemoveAction(null)} disabled={isLoading}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={() => {
+                if (removeAction?.type === 'single') {
+                  handleRemove(removeAction.id).then(() => setRemoveAction(null));
+                } else if (removeAction?.type === 'batch') {
+                  handleRemoveSelected().then(() => setRemoveAction(null));
+                }
+              }}
+              disabled={isLoading}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              {isLoading ? "Removing..." : "Remove"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
