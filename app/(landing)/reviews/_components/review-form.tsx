@@ -453,7 +453,7 @@ export function ReviewForm({
 
       {/* Footer Typography */}
       <div className="mt-auto pt-6 sm:pt-8 text-center flex flex-col items-center justify-center">
-        <h3 className="font-serif text-3xl sm:text-4xl font-bold italic text-foreground tracking-tight">Thanks you</h3>
+        <h3 className="font-serif text-3xl sm:text-4xl font-bold italic text-foreground tracking-tight">Thank you</h3>
         <p className="text-[11px] text-foreground/50 italic font-serif mt-1">For taking the time to share your experience!</p>
       </div>
     </div>
