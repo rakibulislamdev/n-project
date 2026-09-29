@@ -48,7 +48,7 @@ export default async function DashboardLayout({
       <ReviewsStoreInitializer pending={pendingData} approved={approvedData} />
       <Sidebar />
       <MobileTopbar />
-      <main className="flex-1 bg-muted/10 overflow-y-auto">
+      <main className="flex-1 bg-zinc-50/60 dark:bg-[#0E0E0E] overflow-y-auto">
         {children}
       </main>
     </div>

@@ -24,46 +24,46 @@ interface ApprovedReviewsRowProps {
 
 export function ApprovedReviewsRow({ review, isSelected, onToggleSelect, onRemove }: ApprovedReviewsRowProps) {
   return (
-    <TableRow className="border-b-zinc-100 hover:bg-zinc-50/50 transition-colors group">
+    <TableRow className="border-b border-zinc-100 dark:border-zinc-800/80 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/50 transition-colors group">
       <TableCell className="w-[72px] pl-8 align-top pt-[34px]">
         <Checkbox 
           checked={isSelected}
           onCheckedChange={() => onToggleSelect(review.id)}
-          className="border-zinc-200 data-[state=checked]:bg-[#FFC500] data-[state=checked]:border-[#FFC500] data-[state=checked]:text-black rounded-[4px] size-5"
+          className="border-zinc-300 data-[state=checked]:bg-[#FFC500] data-[state=checked]:border-[#FFC500] data-[state=checked]:text-black rounded-[4px] size-5 cursor-pointer"
         />
       </TableCell>
       <TableCell className="align-top pt-5 pb-5">
         <div className="flex items-start gap-4">
-          <Avatar className="w-11 h-11 border border-zinc-100 shadow-sm mt-0.5">
+          <Avatar className="w-11 h-11 border border-zinc-200 dark:border-zinc-700 shadow-sm mt-0.5">
             <AvatarImage src={review.clientAvatar} />
-            <AvatarFallback>{review.clientName?.slice(0, 2).toUpperCase() || "RV"}</AvatarFallback>
+            <AvatarFallback className="font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">{review.clientName?.slice(0, 2).toUpperCase() || "RV"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-0.5">
-            <span className="font-semibold text-[14px] text-zinc-900">{review.clientName}</span>
-            <span className="text-[13px] text-zinc-500 font-medium">{review.clientDate}</span>
+            <span className="font-semibold text-[14px] text-zinc-900 dark:text-zinc-100">{review.clientName}</span>
+            <span className="text-[12px] text-zinc-500 dark:text-zinc-400 font-medium">{review.clientDate}</span>
           </div>
         </div>
       </TableCell>
       <TableCell className="align-top pt-5 pb-5 pr-8">
         <div className="flex flex-col gap-2">
-          <div className="flex text-amber-400 gap-0.5">
+          <div className="flex text-amber-500 gap-0.5">
             {[...Array(review.reviewRating)].map((_, i) => (
               <StarIcon key={i} className="w-[14px] h-[14px] fill-current" />
             ))}
           </div>
-          <p className="text-[13px] text-zinc-400 leading-relaxed font-medium">
+          <p className="text-[13px] text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal">
             {review.reviewText}
           </p>
         </div>
       </TableCell>
       <TableCell className="align-top pt-5 pb-5">
-        <div className="relative w-24 h-16 rounded-xl overflow-hidden shadow-sm bg-zinc-100">
+        <div className="relative w-24 h-16 rounded-xl overflow-hidden shadow-sm bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60">
           <ReviewPhotoGallery propertyImages={review.propertyImages} />
         </div>
       </TableCell>
       <TableCell className="text-right pr-6 align-top pt-7">
         <div className="flex items-center justify-end">
-          <Button onClick={onRemove} variant="outline" className="border-red-100 bg-[#fff5f5] hover:bg-[#ffebeb] text-red-500 rounded-full px-6 h-9 text-[13px] font-semibold tracking-wide border transition-all">
+          <Button onClick={onRemove} variant="outline" className="border-red-200 bg-red-50/80 hover:bg-red-100 text-red-600 hover:text-red-700 dark:bg-red-950/30 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/60 rounded-full px-6 h-9 text-[13px] font-semibold tracking-wide border transition-all cursor-pointer">
             Remove
           </Button>
         </div>

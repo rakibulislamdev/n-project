@@ -116,12 +116,16 @@ export function Sidebar() {
                         setIsReviewsOpen(!isReviewsOpen);
                       }
                     }}
-                    className={`flex items-center px-6 py-3 w-full transition-colors ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "hover:text-white border-l-[3px] border-transparent"}`}
+                    className={`flex items-center px-6 py-3 w-full transition-all duration-200 cursor-pointer ${
+                      isActive 
+                        ? "bg-[#1e1e1e] border-l-[3px] border-primary text-white font-semibold" 
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-800/60 active:bg-zinc-800 border-l-[3px] border-transparent hover:border-zinc-700"
+                    }`}
                   >
                     <item.icon className="w-[18px] h-[18px] shrink-0" />
                     <div className={`flex items-center justify-between transition-all duration-300 overflow-hidden ${isExpanded ? "max-w-[200px] w-full ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>
                       <span className="font-medium text-[14px] whitespace-nowrap">{item.title}</span>
-                      {isReviewsOpen ? <ArrowUp01Icon className="w-4 h-4 shrink-0" /> : <ArrowDown01Icon className="w-4 h-4 shrink-0" />}
+                      {isReviewsOpen ? <ArrowUp01Icon className="w-4 h-4 shrink-0 text-zinc-400" /> : <ArrowDown01Icon className="w-4 h-4 shrink-0 text-zinc-400" />}
                     </div>
                   </button>
 
@@ -136,16 +140,22 @@ export function Sidebar() {
                         <Link
                           key={subIndex}
                           href={subItem.href}
-                          className={`flex items-center py-2 transition-all duration-300 hover:text-white relative ${pathname === subItem.href ? "bg-[#1e1e1e] text-white font-medium" : "text-zinc-500 font-medium"} ${isExpanded ? "pl-[52px] pr-6" : "pl-8 pr-6"}`}
+                          className={`flex items-center py-2.5 transition-all duration-200 relative group cursor-pointer ${
+                            pathname === subItem.href 
+                              ? "bg-[#1e1e1e] text-white font-semibold border-l-2 border-primary" 
+                              : "text-zinc-400 hover:text-white hover:bg-zinc-800/50 font-medium border-l-2 border-transparent"
+                          } ${isExpanded ? "pl-[50px] pr-6" : "pl-8 pr-6"}`}
                         >
                           {/* Horizontal branch line (visible only when expanded) */}
                           <div className={`absolute left-[32px] top-1/2 -translate-y-1/2 w-[10px] h-px bg-zinc-800 transition-all duration-300 ${isExpanded ? "opacity-100" : "opacity-0"}`}></div>
 
-                          <subItem.icon className="w-[15px] h-[15px] shrink-0" />
+                          <subItem.icon className="w-[15px] h-[15px] shrink-0 text-zinc-400 group-hover:text-white transition-colors" />
                           <div className={`flex items-center justify-between transition-all duration-300 overflow-hidden ${isExpanded ? "w-full ml-3 opacity-100" : "w-0 ml-0 opacity-0"}`}>
                             <span className="text-[13px] whitespace-nowrap">{subItem.title}</span>
                             {subItem.count !== undefined && (
-                              <span className="bg-zinc-800 text-[11px] font-bold px-2 py-0.5 rounded-full text-zinc-300 shrink-0">{subItem.count}</span>
+                              <span className="bg-zinc-800/90 group-hover:bg-zinc-700 text-[11px] font-bold px-2 py-0.5 rounded-full text-zinc-200 group-hover:text-white border border-zinc-700/60 shrink-0 transition-colors">
+                                {subItem.count}
+                              </span>
                             )}
                           </div>
                         </Link>
@@ -162,7 +172,11 @@ export function Sidebar() {
               <Link
                 key={index}
                 href={item.href || "#"}
-                className={`flex items-center px-6 py-3 transition-colors hover:text-white ${isActive ? "bg-[#1e1e1e] border-l-[3px] border-white text-white" : "border-l-[3px] border-transparent"}`}
+                className={`flex items-center px-6 py-3 transition-all duration-200 cursor-pointer ${
+                  isActive 
+                    ? "bg-[#1e1e1e] border-l-[3px] border-primary text-white font-semibold" 
+                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/60 active:bg-zinc-800 border-l-[3px] border-transparent hover:border-zinc-700"
+                }`}
               >
                 <item.icon className="w-[18px] h-[18px] shrink-0" />
                 <span className={`font-medium text-[14px] whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? "max-w-[120px] ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>{item.title}</span>
@@ -172,12 +186,12 @@ export function Sidebar() {
         </nav>
 
         {/* Logout Button */}
-        <div className="mt-auto px-6 py-4">
+        <div className="mt-auto px-4 py-4 border-t border-zinc-800/60">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full transition-colors hover:text-red-500 group cursor-pointer"
+            className="flex items-center w-full px-3 py-2.5 rounded-xl transition-all duration-200 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 active:bg-red-500/20 group cursor-pointer"
           >
-            <Logout01Icon className="w-[18px] h-[18px] shrink-0" />
+            <Logout01Icon className="w-[18px] h-[18px] shrink-0 text-zinc-400 group-hover:text-red-400 transition-colors" />
             <span className={`font-medium text-[14px] whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? "max-w-[120px] ml-3 opacity-100" : "max-w-0 ml-0 opacity-0"}`}>
               Log out
             </span>

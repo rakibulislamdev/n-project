@@ -10,23 +10,23 @@ interface ApprovedReviewsTableProps {
 
 export function ApprovedReviewsTable({ reviews, selectedIds, onToggleSelect, onRemove }: ApprovedReviewsTableProps) {
   return (
-    <div className="border border-zinc-100 rounded-xl overflow-hidden bg-white shadow-[0px_2px_10px_-4px_rgba(0,0,0,0.05)]">
+    <div className="border border-zinc-200/80 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs">
       <Table>
-        <TableHeader className="bg-[#f8f9fa]">
-          <TableRow className="border-b-zinc-100 hover:bg-[#f8f9fa]">
+        <TableHeader className="bg-zinc-50/90 dark:bg-zinc-900/90 border-b border-zinc-200/80 dark:border-zinc-800">
+          <TableRow className="border-b border-zinc-200/80 dark:border-zinc-800 hover:bg-zinc-50/90 dark:hover:bg-zinc-900/90">
             <TableHead className="w-[72px] pl-8">
               {/* Visual placeholder for checkbox col */}
             </TableHead>
-            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[25%] h-14">CLIENT</TableHead>
-            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[40%] h-14">REVIEW</TableHead>
-            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[15%] h-14">PHOTOS</TableHead>
-            <TableHead className="text-[12px] font-semibold text-zinc-500 tracking-wider w-[20%] text-right pr-12 h-14">ACTION</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[25%] h-14">CLIENT</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[40%] h-14">REVIEW</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[15%] h-14">PHOTOS</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[20%] text-right pr-12 h-14">ACTION</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {reviews.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} className="h-32 text-center text-[14px] text-zinc-500 font-medium">
+              <TableCell colSpan={5} className="h-32 text-center text-[14px] text-zinc-600 dark:text-zinc-400 font-medium">
                 No approved reviews found.
               </TableCell>
             </TableRow>

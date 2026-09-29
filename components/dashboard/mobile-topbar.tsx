@@ -16,7 +16,8 @@ export function MobileTopbar() {
 
       <button
         onClick={toggleMobileOpen}
-        className="text-zinc-400 hover:text-white p-2 -mr-2 rounded-lg hover:bg-zinc-800 transition-colors"
+        className="text-zinc-400 hover:text-white p-2 -mr-2 rounded-lg hover:bg-zinc-800 active:bg-zinc-700 transition-all cursor-pointer"
+        aria-label="Open navigation menu"
       >
         <Menu11Icon className="w-6 h-6" />
       </button>

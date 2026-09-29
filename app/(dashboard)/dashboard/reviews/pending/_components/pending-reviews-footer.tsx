@@ -31,17 +31,17 @@ export function PendingReviewsFooter({
       <div className="flex flex-wrap items-center justify-between w-full gap-y-4 gap-x-6">
         
         {/* Selection Count */}
-        <div className="text-[13px] font-medium text-zinc-500 shrink-0">
+        <div className="text-[13px] font-semibold text-zinc-600 dark:text-zinc-400 shrink-0">
           {selectedCount} of {totalCount} selected
         </div>
         
         {/* Actions Area */}
         <div className="flex flex-wrap items-center gap-4 md:gap-6 w-full sm:w-auto">
-          <label className="flex items-center gap-3 cursor-pointer text-[14px] font-bold text-zinc-500 hover:text-zinc-800 transition-colors shrink-0">
+          <label className="flex items-center gap-2.5 cursor-pointer text-[14px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors shrink-0 select-none">
             <Checkbox 
               checked={isAllCurrentSelected && totalCount > 0}
               onCheckedChange={onToggleSelectAll}
-              className="border-zinc-200 data-[state=checked]:bg-[#FFC500] data-[state=checked]:border-[#FFC500] data-[state=checked]:text-black rounded-[4px] size-5"
+              className="border-zinc-300 data-[state=checked]:bg-[#FFC500] data-[state=checked]:border-[#FFC500] data-[state=checked]:text-black rounded-[4px] size-5 cursor-pointer"
             />
             Select All
           </label>
@@ -51,7 +51,7 @@ export function PendingReviewsFooter({
               variant="outline" 
               onClick={onApproveSelected}
               disabled={selectedCount === 0}
-              className="flex-1 sm:flex-none rounded-xl md:rounded-full bg-black text-white hover:text-white from-zinc-800 border border-transparent h-10 px-4 md:px-6 text-[13px] font-bold gap-2 disabled:opacity-50 disabled:bg-[#f3f4f6] disabled:text-zinc-500 disabled:border-zinc-200 shadow-sm transition-all"
+              className="flex-1 sm:flex-none rounded-xl md:rounded-full bg-zinc-900 hover:bg-black text-white hover:text-white border border-transparent h-10 px-4 md:px-6 text-[13px] font-bold gap-2 disabled:opacity-50 disabled:bg-zinc-100 disabled:text-zinc-400 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-500 shadow-xs hover:shadow transition-all cursor-pointer"
             >
               <CheckmarkBadge01Icon className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
               <span className="xl:hidden">Approve</span>
@@ -62,7 +62,7 @@ export function PendingReviewsFooter({
               variant="outline"
               onClick={onRejectSelected}
               disabled={selectedCount === 0}
-              className="flex-1 sm:flex-none rounded-xl md:rounded-full bg-red-500 text-white hover:text-white from-red-600 border border-transparent h-10 px-4 md:px-6 text-[13px] font-bold gap-2 disabled:opacity-50 disabled:bg-[#fff5f5] disabled:text-red-500 disabled:border-red-100 shadow-sm transition-all"
+              className="flex-1 sm:flex-none rounded-xl md:rounded-full bg-red-600 hover:bg-red-700 text-white hover:text-white border border-transparent h-10 px-4 md:px-6 text-[13px] font-bold gap-2 disabled:opacity-50 disabled:bg-red-50 dark:disabled:bg-red-950/20 disabled:text-red-400 shadow-xs hover:shadow transition-all cursor-pointer"
             >
               <span className="font-bold text-base md:text-lg leading-none mb-0.5">×</span> 
               <span className="xl:hidden">Reject</span>

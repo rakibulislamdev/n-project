@@ -130,50 +130,51 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
   return (
     <header className="px-4 md:px-8 py-6 flex justify-between items-start gap-4">
       <div className="flex-1 min-w-0">
-        <div className="text-[11px] text-zinc-400 font-semibold tracking-wider mb-2 flex flex-wrap items-center gap-2">
+        <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-semibold tracking-wider mb-2 flex flex-wrap items-center gap-2">
           {breadcrumbs.map((crumb, index) => (
             <React.Fragment key={crumb}>
-              <span className={index === breadcrumbs.length - 1 ? "text-zinc-700" : ""}>
+              <span className={index === breadcrumbs.length - 1 ? "text-zinc-900 dark:text-zinc-100 font-bold" : "hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"}>
                 {crumb.toUpperCase()}
               </span>
               {index < breadcrumbs.length - 1 && (
-                <span className="text-zinc-300">{">"}</span>
+                <span className="text-zinc-400/80 dark:text-zinc-600 font-normal">{">"}</span>
               )}
             </React.Fragment>
           ))}
         </div>
-        <h1 className="text-[24px] md:text-[28px] font-bold mb-1.5 text-zinc-900 tracking-tight truncate">{title}</h1>
-        <p className="text-zinc-500 text-sm truncate">{description}</p>
+        <h1 className="text-[24px] md:text-[28px] font-bold mb-1.5 text-zinc-900 dark:text-zinc-50 tracking-tight truncate">{title}</h1>
+        <p className="text-zinc-600 dark:text-zinc-400 text-sm truncate">{description}</p>
       </div>
-      <div className="flex items-center gap-4 md:gap-6 shrink-0 -mt-3 md:-mt-4">
+      <div className="flex items-center gap-4 md:gap-6 shrink-0 -mt-2 md:-mt-3">
         <div className="relative" ref={notifRef}>
           <button 
-            className="relative p-2 -m-2 rounded-full hover:bg-zinc-100 transition-colors"
+            className="relative p-2.5 rounded-xl text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all border border-transparent hover:border-zinc-200/80 dark:hover:border-zinc-700/80 cursor-pointer"
             onClick={() => setIsNotifOpen(!isNotifOpen)}
+            title="Notifications"
           >
-            <Notification02Icon className="w-6 h-6 text-zinc-500" />
+            <Notification02Icon className="w-5 h-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-zinc-900 ring-2 ring-red-400/20"></span>
             )}
           </button>
 
           {/* Notification Sheet Overlay */}
           {isNotifOpen && (
             <div 
-              className="fixed inset-0 bg-black/40 z-[99] transition-opacity"
+              className="fixed inset-0 bg-black/50 backdrop-blur-xs z-[99] transition-opacity"
               onClick={() => setIsNotifOpen(false)}
             />
           )}
 
           {/* Notification Side Sheet */}
           <div 
-            className={`fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl z-[100] transform transition-transform duration-300 ease-in-out flex flex-col ${isNotifOpen ? "translate-x-0" : "translate-x-full"}`}
+            className={`fixed right-0 top-0 h-full w-full max-w-sm bg-white dark:bg-zinc-900 shadow-2xl z-[100] transform transition-transform duration-300 ease-in-out flex flex-col border-l border-zinc-200 dark:border-zinc-800 ${isNotifOpen ? "translate-x-0" : "translate-x-full"}`}
           >
-            <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between shrink-0">
-              <h3 className="text-lg font-bold text-zinc-900">Notifications</h3>
+            <div className="px-6 py-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between shrink-0">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Notifications</h3>
               <button 
                 onClick={() => setIsNotifOpen(false)}
-                className="p-2 hover:bg-zinc-100 rounded-full transition-colors text-zinc-500"
+                className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
               >
                 ✕
               </button>
@@ -182,26 +183,26 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
             <div className="flex-1 overflow-y-auto">
               {notifications.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-zinc-400 gap-3">
-                  <Notification02Icon className="w-12 h-12 opacity-20" />
+                  <Notification02Icon className="w-12 h-12 opacity-30" />
                   <p className="text-sm font-medium">No new notifications</p>
                 </div>
               ) : (
                 notifications.map((notif: any) => (
-                  <div key={notif.id} className={`px-6 py-4 border-b border-zinc-50 last:border-0 hover:bg-zinc-50 transition-colors flex gap-4 ${!notif.isRead ? 'bg-blue-50/40' : ''}`}>
+                  <div key={notif.id} className={`px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/60 transition-colors flex gap-4 ${!notif.isRead ? 'bg-blue-50/60 dark:bg-blue-950/30' : ''}`}>
                     <div className="mt-1 shrink-0">
-                      <div className={`w-2 h-2 rounded-full ${!notif.isRead ? 'bg-blue-500' : 'bg-transparent'}`}></div>
+                      <div className={`w-2 h-2 rounded-full ${!notif.isRead ? 'bg-blue-600 dark:bg-blue-400' : 'bg-transparent'}`}></div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[15px] text-zinc-800 font-medium leading-snug">{notif.message}</p>
-                      <p className="text-xs text-zinc-400 mt-1.5">{new Date(notif.createdAt || Date.now()).toLocaleString()}</p>
+                      <p className="text-[14px] text-zinc-900 dark:text-zinc-100 font-semibold leading-snug">{notif.message}</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1.5">{new Date(notif.createdAt || Date.now()).toLocaleString()}</p>
                     </div>
                     <div className="flex items-start gap-2 shrink-0">
                       {!notif.isRead && (
-                        <button onClick={() => handleMarkRead(notif.id)} title="Mark as read" className="text-blue-500 hover:text-blue-700 p-1.5 hover:bg-blue-100 rounded-md transition-colors">
+                        <button onClick={() => handleMarkRead(notif.id)} title="Mark as read" className="text-blue-600 hover:text-blue-800 dark:text-blue-400 p-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-md transition-colors cursor-pointer">
                           <CheckmarkCircle01Icon className="w-5 h-5" />
                         </button>
                       )}
-                      <button onClick={() => handleDeleteNotif(notif.id)} title="Delete" className="text-zinc-400 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-md transition-colors">
+                      <button onClick={() => handleDeleteNotif(notif.id)} title="Delete" className="text-zinc-400 hover:text-red-600 dark:text-zinc-500 dark:hover:text-red-400 p-1.5 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md transition-colors cursor-pointer">
                         <Delete01Icon className="w-5 h-5" />
                       </button>
                     </div>
@@ -213,34 +214,34 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
         </div>
         <div className="relative" ref={dropdownRef}>
           <div 
-            className="flex items-center gap-3 cursor-pointer hover:bg-zinc-50 p-1.5 -m-1.5 rounded-lg transition-colors select-none"
+            className="flex items-center gap-3 cursor-pointer p-1.5 rounded-xl transition-all select-none border border-transparent hover:border-zinc-200/80 dark:hover:border-zinc-700/80 hover:bg-zinc-100/90 dark:hover:bg-zinc-800/80 group"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <Avatar className="w-10 h-10 shadow-sm border border-zinc-200">
+            <Avatar className="w-10 h-10 shadow-sm border border-zinc-200 dark:border-zinc-700 ring-2 ring-transparent group-hover:ring-primary/20 transition-all">
               <AvatarImage src={user?.profileImage || ""} />
               <AvatarFallback className="font-semibold text-[15px] text-white bg-slate-800">
                 {getInitials(user?.name || "Admin")}
               </AvatarFallback>
             </Avatar>
             <div className="hidden md:flex flex-col text-sm">
-              <span className="font-bold text-zinc-900">{user?.name || "Admin"}</span>
-              <span className="text-xs text-zinc-400 font-medium">{user?.role?.replace("_", " ") || "Super Admin"}</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">{user?.name || "Admin"}</span>
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-semibold tracking-wide uppercase">{user?.role?.replace("_", " ") || "Super Admin"}</span>
             </div>
-            <button className="hidden md:block text-zinc-400 ml-1">
-              <ArrowDown01Icon className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
+            <div className="hidden md:flex items-center justify-center w-5 h-5 text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-200 ml-0.5 transition-colors">
+              <ArrowDown01Icon className={`w-3.5 h-3.5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </div>
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border border-zinc-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+            <div className="absolute right-0 mt-2.5 w-52 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-200/80 dark:border-zinc-800 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
               <button 
                 onClick={() => {
                   setIsDropdownOpen(false);
                   router.push("/dashboard/profile");
                 }}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors text-left group cursor-pointer"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-white font-medium transition-colors text-left group cursor-pointer"
               >
-                <UserIcon className="w-4 h-4 text-zinc-500 group-hover:text-black transition-colors shrink-0" />
+                <UserIcon className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors shrink-0" />
                 <span>Profile</span>
               </button>
               <button 
@@ -248,17 +249,17 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
                   setIsDropdownOpen(false);
                   router.push("/dashboard/settings");
                 }}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors text-left group cursor-pointer"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-white font-medium transition-colors text-left group cursor-pointer"
               >
-                <Settings02Icon className="w-4 h-4 text-zinc-500 group-hover:text-black transition-colors shrink-0" />
+                <Settings02Icon className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors shrink-0" />
                 <span>Settings</span>
               </button>
-              <div className="h-px bg-zinc-100 my-1 mx-2"></div>
+              <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-1 mx-2"></div>
               <button 
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors text-left group cursor-pointer"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-700 dark:hover:text-red-300 font-semibold transition-colors text-left group cursor-pointer"
               >
-                <Logout01Icon className="w-4 h-4 text-red-500 group-hover:text-red-600 transition-colors shrink-0" />
+                <Logout01Icon className="w-4 h-4 text-red-500 dark:text-red-400 group-hover:text-red-600 dark:group-hover:text-red-300 transition-colors shrink-0" />
                 <span>Log out</span>
               </button>
             </div>
