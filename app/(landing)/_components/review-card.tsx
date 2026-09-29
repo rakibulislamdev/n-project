@@ -38,29 +38,29 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
         scale: { duration: 0.4, delay: index * 0.08, ease: "easeOut" },
         filter: { duration: 0.4, delay: index * 0.08, ease: "easeOut" },
       }}
-      className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.3333%-16px)] flex-shrink-0"
+      className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.3333%-16px)] flex-shrink-0 flex flex-col"
     >
-      <Card className="border-border/60 shadow-sm relative overflow-hidden h-full">
-        <CardContent className="p-6 flex flex-col gap-4">
+      <Card className="border-border/60 shadow-sm relative overflow-hidden h-full flex flex-col">
+        <CardContent className="p-6 flex flex-col flex-1 gap-4">
           {/* Quote Icon in Background */}
-          <div className="absolute top-6 right-6 text-muted-foreground/10">
+          <div className="absolute top-6 right-6 text-muted-foreground/10 pointer-events-none">
             <QuoteIcon className="rotate-180 w-14 h-14" />
           </div>
 
           {/* Header */}
           <div className="flex items-center gap-4 relative z-10">
-            <Avatar className="w-12 h-12 border border-border/50">
+            <Avatar className="w-12 h-12 border border-border/50 shrink-0">
               <AvatarImage src={review.avatarUrl} alt={review.name} />
               <AvatarFallback>{review.name.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col">
-              <span className="font-semibold text-sm">{review.name}</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-semibold text-sm truncate">{review.name}</span>
               <span className="text-xs text-muted-foreground">{review.date}</span>
             </div>
           </div>
 
           {/* Rating */}
-          <div className="flex items-center gap-1 text-primary relative z-10 mt-2">
+          <div className="flex items-center gap-1 text-primary relative z-10 mt-1">
             {[...Array(5)].map((_, i) => (
               <StarIcon
                 key={i}
@@ -69,8 +69,10 @@ export function ReviewCard({ review, index }: ReviewCardProps) {
             ))}
           </div>
 
-          {/* Text */}
-          <p className="text-sm text-muted-foreground leading-relaxed relative z-10">
+          <p
+            className="text-sm text-muted-foreground leading-relaxed relative z-10 line-clamp-3 min-h-[4.25rem]"
+            title={review.text}
+          >
             {review.text}
           </p>
         </CardContent>

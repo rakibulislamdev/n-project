@@ -11,16 +11,16 @@ interface ApprovedReviewsTableProps {
 export function ApprovedReviewsTable({ reviews, selectedIds, onToggleSelect, onRemove }: ApprovedReviewsTableProps) {
   return (
     <div className="border border-zinc-200/80 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs">
-      <Table>
+      <Table className="table-fixed w-full">
         <TableHeader className="bg-zinc-50/90 dark:bg-zinc-900/90 border-b border-zinc-200/80 dark:border-zinc-800">
           <TableRow className="border-b border-zinc-200/80 dark:border-zinc-800 hover:bg-zinc-50/90 dark:hover:bg-zinc-900/90">
             <TableHead className="w-[72px] pl-8">
               {/* Visual placeholder for checkbox col */}
             </TableHead>
-            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[25%] h-14">CLIENT</TableHead>
-            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[40%] h-14">REVIEW</TableHead>
-            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[15%] h-14">PHOTOS</TableHead>
-            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[20%] text-right pr-12 h-14">ACTION</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[26%] h-12">CLIENT</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[32%] h-12">REVIEW</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[18%] h-12">PHOTOS</TableHead>
+            <TableHead className="text-[12px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider w-[24%] text-right pr-12 h-12">ACTION</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
