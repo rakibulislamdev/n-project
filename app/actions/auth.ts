@@ -129,3 +129,87 @@ export async function logoutAction() {
     return { success: false, message: "An error occurred during logout." };
   }
 }
+
+export async function updateProfileAction(formData: { name?: string; phone?: string; profileImage?: string | null }) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    if (!token) {
+      return { success: false, message: "Unauthorized. Please log in again." };
+    }
+
+    const response = await fetch(`${baseUrl}/auth/update-profile`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      return {
+        success: true,
+        message: data.message || "Profile updated successfully",
+        data: data.data
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || "Failed to update profile"
+      };
+    }
+  } catch (error) {
+    console.error("Server Action Update Profile Error:", error);
+    return {
+      success: false,
+      message: "An error occurred while updating profile."
+    };
+  }
+}
+
+export async function changePasswordAction(payload: { oldPassword?: string; currentPassword?: string; newPassword?: string; confirmPassword?: string }) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    if (!token) {
+      return { success: false, message: "Unauthorized. Please log in again." };
+    }
+
+    const response = await fetch(`${baseUrl}/auth/change-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      return {
+        success: true,
+        message: data.message || "Password changed successfully"
+      };
+    } else {
+      return {
+        success: false,
+        message: data.message || "Failed to change password"
+      };
+    }
+  } catch (error) {
+    console.error("Server Action Change Password Error:", error);
+    return {
+      success: false,
+      message: "An error occurred while updating password."
+    };
+  }
+}
+

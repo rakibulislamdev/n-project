@@ -15,7 +15,9 @@ import {
   HourglassIcon,
   ValidationApprovalIcon,
   SidebarRightIcon,
-  Logout01Icon
+  Logout01Icon,
+  UserIcon,
+  Settings02Icon
 } from "hugeicons-react";
 
 export function Sidebar() {
@@ -59,6 +61,16 @@ export function Sidebar() {
         { title: "Pending", href: "/dashboard/reviews/pending", count: pendingReviews.length, icon: HourglassIcon },
         { title: "Approved", href: "/dashboard/reviews/approved", count: approvedReviews.length, icon: ValidationApprovalIcon },
       ],
+    },
+    {
+      title: "Profile",
+      href: "/dashboard/profile",
+      icon: UserIcon,
+    },
+    {
+      title: "Settings",
+      href: "/dashboard/settings",
+      icon: Settings02Icon,
     },
   ];
 

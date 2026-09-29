@@ -1,6 +1,14 @@
 "use client";
 
-import { Notification02Icon, ArrowDown01Icon, CheckmarkCircle01Icon, Delete01Icon } from "hugeicons-react";
+import { 
+  Notification02Icon, 
+  ArrowDown01Icon, 
+  CheckmarkCircle01Icon, 
+  Delete01Icon,
+  UserIcon,
+  Settings02Icon,
+  Logout01Icon
+} from "hugeicons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -224,19 +232,34 @@ export function PageHeader({ breadcrumbs, title, description }: PageHeaderProps)
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border border-zinc-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
-              <button className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors">
-                Profile
+            <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border border-zinc-100 py-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+              <button 
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  router.push("/dashboard/profile");
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors text-left group cursor-pointer"
+              >
+                <UserIcon className="w-4 h-4 text-zinc-500 group-hover:text-black transition-colors shrink-0" />
+                <span>Profile</span>
               </button>
-              <button className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors">
-                Settings
+              <button 
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  router.push("/dashboard/settings");
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-black font-medium transition-colors text-left group cursor-pointer"
+              >
+                <Settings02Icon className="w-4 h-4 text-zinc-500 group-hover:text-black transition-colors shrink-0" />
+                <span>Settings</span>
               </button>
               <div className="h-px bg-zinc-100 my-1 mx-2"></div>
               <button 
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-bold transition-colors"
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 hover:bg-red-50 font-semibold transition-colors text-left group cursor-pointer"
               >
-                Log out
+                <Logout01Icon className="w-4 h-4 text-red-500 group-hover:text-red-600 transition-colors shrink-0" />
+                <span>Log out</span>
               </button>
             </div>
           )}
