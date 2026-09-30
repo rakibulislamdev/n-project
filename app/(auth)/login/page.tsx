@@ -1,6 +1,26 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/login-form";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
+  const user = cookieStore.get("user")?.value;
+
+  if (token || user) {
+    try {
+      const parsedUser = user ? JSON.parse(user) : null;
+      const role = parsedUser?.role?.toUpperCase() || "";
+      if (role.includes("ADMIN")) {
+        redirect("/dashboard");
+      } else {
+        redirect("/");
+      }
+    } catch {
+      redirect("/dashboard");
+    }
+  }
+
   return (
     <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-sm border border-zinc-100">
       <div className="text-center mb-8">

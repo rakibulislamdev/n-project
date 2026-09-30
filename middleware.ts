@@ -1,34 +1,59 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+function isAdminRole(role?: string | null): boolean {
+  if (!role) return false;
+  const upper = role.toUpperCase().trim();
+  return upper === 'ADMIN' || upper === 'SUPER_ADMIN' || upper.includes('ADMIN');
+}
+
+function parseUserCookie(cookieValue?: string) {
+  if (!cookieValue) return null;
+  try {
+    return JSON.parse(cookieValue);
+  } catch {
+    return null;
+  }
+}
+
 export function middleware(request: NextRequest) {
-  // Check if the user is trying to access the dashboard
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    const userCookie = request.cookies.get('user')?.value;
-    
-    // If no user cookie is found, redirect to login page
-    if (!userCookie) {
-      return NextResponse.redirect(new URL('/login', request.url));
+  const { pathname } = request.nextUrl;
+  const userCookie = request.cookies.get('user')?.value;
+  const token = request.cookies.get('accessToken')?.value;
+  const user = parseUserCookie(userCookie);
+  
+  const isAuthenticated = Boolean(token || user);
+  const isAdmin = Boolean(user && isAdminRole(user.role));
+
+  // 1. If already logged in, prevent visiting login/signup
+  if (pathname === '/login' || pathname === '/signup') {
+    if (isAuthenticated) {
+      // If admin, go to dashboard. If normal user, go to home.
+      const destination = isAdmin ? '/dashboard' : '/';
+      return NextResponse.redirect(new URL(destination, request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // 2. Strict Dashboard Protection: Admin ONLY
+  if (pathname.startsWith('/dashboard')) {
+    // If not logged in at all, redirect to login
+    if (!isAuthenticated) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
     }
 
-    try {
-      const user = JSON.parse(userCookie);
-      
-      // Check for strict role and email requirement
-      if (user.role !== 'SUPER_ADMIN' || user.email !== 'nader@transseas.com') {
-        // Redirect unauthorized users to the login page
-        return NextResponse.redirect(new URL('/login', request.url));
-      }
-    } catch (error) {
-      // If there's an error parsing the cookie, redirect to login page
-      return NextResponse.redirect(new URL('/login', request.url));
+    // If logged in but NOT an admin, block access and redirect to home
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL('/', request.url));
     }
   }
 
   return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
+// Matching Paths
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ['/dashboard/:path*', '/login', '/signup'],
 };
