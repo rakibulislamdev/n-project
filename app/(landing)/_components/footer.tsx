@@ -17,8 +17,9 @@ export function Footer() {
         <ScrollDiv 
           scale={0.95}
           duration={0.7}
-          className="relative w-full rounded-2xl overflow-hidden min-h-[320px] flex items-center bg-muted"
+          className="relative w-full rounded-2xl overflow-hidden min-h-[320px] flex items-center bg-zinc-800"
         >
+          {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/footer-image.svg"
@@ -29,22 +30,25 @@ export function Footer() {
             />
           </div>
 
+          {/* Subtle light gradient: only gently shades behind the text on the left, keeping the sky and building clear & bright */}
+          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-black/40 via-black/15 to-transparent pointer-events-none" />
+
           <div className="relative z-10 w-full p-6 md:p-10 lg:p-16 flex flex-col lg:flex-row justify-between items-center lg:items-end gap-6 text-center lg:text-left">
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-foreground/80">
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/90 drop-shadow-sm">
                 Have a story to share?
               </span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-md">
                 Your Experience Matters
               </h2>
-              <p className="text-sm text-foreground/80 mt-1 md:mt-2">
+              <p className="text-sm text-white/90 mt-1 md:mt-2 max-w-lg drop-shadow-sm">
                 Help others by sharing your experience. It only takes a minute.
               </p>
             </div>
 
             {pathname !== "/reviews" && (
               <Link href="/reviews">
-                <Button size="lg" className="rounded-full px-8 bg-zinc-900 hover:bg-black text-white font-medium shadow-md transition-all cursor-pointer">
+                <Button size="lg" className="rounded-full px-8 bg-zinc-900 hover:bg-black text-white font-medium shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
                   Write a Review
                 </Button>
               </Link>
