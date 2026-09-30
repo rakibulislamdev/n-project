@@ -235,17 +235,17 @@ export function ReviewForm({
 
   if (isSubmitted) {
     return (
-      <div className="bg-background rounded-2xl shadow-xl w-full p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] h-full font-inter text-center">
-        <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold italic text-foreground mb-4">Thank you</h2>
+      <div className="bg-card rounded-2xl shadow-sm dark:shadow-none w-full p-6 sm:p-8 lg:p-10 flex flex-col items-center justify-center min-h-[350px] sm:min-h-[480px] h-full flex-1 font-inter text-center">
+        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold italic text-foreground mb-3">Thank you</h2>
         <p className="text-sm text-foreground/60 italic font-serif">For taking the time to share your experience!</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-background rounded-2xl shadow-xl w-full p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col font-inter h-full">
+    <div className="bg-card rounded-2xl shadow-sm dark:shadow-none w-full p-5 sm:p-6 lg:p-7 flex flex-col font-inter h-full flex-1">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
         <h2 className="text-xl sm:text-2xl font-bold text-foreground">Write a Review</h2>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-foreground/60">
           <SafeInfoIcon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
@@ -253,21 +253,21 @@ export function ReviewForm({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 md:gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-4">
         {/* Name */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-foreground">Name <span className="text-red-500">*</span></label>
           <Input
             required
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
+            className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-11 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
           />
         </div>
 
         {/* Email */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-foreground">Email <span className="text-red-500">*</span></label>
           <Input
             required
@@ -275,12 +275,12 @@ export function ReviewForm({
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-12 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
+            className="bg-background border border-border shadow-sm hover:border-border/80 h-10 sm:h-11 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors text-sm"
           />
         </div>
 
         {/* Rating */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           <label className="text-xs font-semibold text-foreground">Your Rating <span className="text-red-500">*</span></label>
           <div className="flex items-center gap-1" onMouseLeave={() => setHoverRating(0)}>
             {[1, 2, 3, 4, 5].map((star) => (
@@ -292,9 +292,9 @@ export function ReviewForm({
                 className="focus:outline-none transition-transform hover:scale-110 active:scale-95"
               >
                 {(hoverRating || rating) >= star ? (
-                  <StarIcon className="w-6 h-6 transition-colors duration-200 text-primary" />
+                  <StarIcon className="w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-200 text-primary" />
                 ) : (
-                  <StarOutlineIcon className="w-6 h-6 transition-colors duration-200 text-primary" />
+                  <StarOutlineIcon className="w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-200 text-primary" />
                 )}
               </button>
             ))}
@@ -302,17 +302,17 @@ export function ReviewForm({
         </div>
 
         {/* Review Textarea */}
-        <div className="flex flex-col gap-2 relative">
+        <div className="flex flex-col gap-1.5 relative">
           <label className="text-xs font-semibold text-foreground">Your Review <span className="text-red-500">*</span></label>
           <Textarea
             required
             placeholder="Tell us about your experience..."
-            className="bg-background border border-border shadow-sm hover:border-border/80 min-h-[120px] sm:min-h-[160px] resize-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors pt-4 pb-8 text-sm"
+            className="bg-background border border-border shadow-sm hover:border-border/80 h-[110px] min-h-[110px] resize-y focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary transition-colors pt-3 pb-7 text-sm"
             maxLength={500}
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
           />
-          <span className="absolute bottom-3 right-3 text-[10px] text-foreground/40">
+          <span className="absolute bottom-2.5 right-6 text-[10px] text-foreground/40 pointer-events-none">
             {reviewText.length}/500
           </span>
         </div>
@@ -435,7 +435,7 @@ export function ReviewForm({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-12 sm:h-14 bg-foreground text-background hover:bg-foreground/90 mt-1 sm:mt-2 rounded-xl text-sm sm:text-base font-semibold group flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full h-11 sm:h-12 bg-foreground text-background hover:bg-foreground/90 mt-1 rounded-xl text-sm sm:text-base font-semibold group flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">
@@ -450,12 +450,6 @@ export function ReviewForm({
           )}
         </Button>
       </form>
-
-      {/* Footer Typography */}
-      <div className="mt-auto pt-6 sm:pt-8 text-center flex flex-col items-center justify-center">
-        <h3 className="font-serif text-3xl sm:text-4xl font-bold italic text-foreground tracking-tight">Thank you</h3>
-        <p className="text-[11px] text-foreground/50 italic font-serif mt-1">For taking the time to share your experience!</p>
-      </div>
     </div>
   );
 }

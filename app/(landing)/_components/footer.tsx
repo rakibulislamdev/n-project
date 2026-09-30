@@ -44,7 +44,7 @@ export function Footer() {
 
             {pathname !== "/reviews" && (
               <Link href="/reviews">
-                <Button variant="default" size="lg" className="rounded-full px-8 bg-foreground text-background hover:bg-foreground/90 font-medium">
+                <Button size="lg" className="rounded-full px-8 bg-zinc-900 hover:bg-black text-white font-medium shadow-md transition-all cursor-pointer">
                   Write a Review
                 </Button>
               </Link>
@@ -61,12 +61,12 @@ export function Footer() {
           className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground pt-4"
         >
           <p>© {new Date().getFullYear()} Nader Ayoub. All rights reserved.</p>
-          <div className="flex items-center gap-5 text-brand-dark">
-            <a href="#" className="hover:text-foreground/70 transition-colors"><FacebookIcon className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-foreground/70 transition-colors"><InstagramIcon className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-foreground/70 transition-colors"><LinkedinIcon className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-foreground/70 transition-colors"><YoutubeIcon className="w-4 h-4" /></a>
-            <a href="#" className="hover:text-foreground/70 transition-colors">
+          <div className="flex items-center gap-5 text-muted-foreground">
+            <a href="#" className="hover:text-foreground transition-colors"><FacebookIcon className="w-4 h-4" /></a>
+            <a href="#" className="hover:text-foreground transition-colors"><InstagramIcon className="w-4 h-4" /></a>
+            <a href="#" className="hover:text-foreground transition-colors"><LinkedinIcon className="w-4 h-4" /></a>
+            <a href="#" className="hover:text-foreground transition-colors"><YoutubeIcon className="w-4 h-4" /></a>
+            <a href="#" className="hover:text-foreground transition-colors">
               <XIcon className="w-4 h-4" />
             </a>
           </div>

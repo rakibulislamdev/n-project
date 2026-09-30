@@ -111,7 +111,7 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-white text-zinc-900 min-h-screen">
+    <div className="flex-1 flex flex-col bg-transparent text-foreground min-h-full">
       <PageHeader
         breadcrumbs={["REVIEWS", "APPROVED REVIEWS"]}
         title="Approved Reviews"
@@ -160,7 +160,7 @@ export default function ApprovedReviewsClient({ initialReviews }: ApprovedReview
                 }
               }}
               disabled={isLoading}
-              className="bg-red-500 hover:bg-red-600 text-white"
+              className="!bg-red-600 hover:!bg-red-700 !text-white font-semibold cursor-pointer shadow-sm"
             >
               {isLoading ? "Removing..." : "Remove"}
             </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef, useTransition, useMemo } from "react";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,14 @@ import {
   Camera01Icon,
   Mail01Icon,
   CallIcon,
-  SecurityCheckIcon,
-  CheckmarkCircle01Icon,
   UserIcon,
   LockPasswordIcon,
   Loading03Icon,
+  Shield02Icon,
+  LockIcon,
+  Key01Icon,
+  ViewIcon,
+  ViewOffSlashIcon,
 } from "hugeicons-react";
 import { toast } from "sonner";
 import { updateProfileAction, changePasswordAction } from "@/app/actions/auth";
@@ -39,6 +42,9 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChangingPassword, startPasswordTransition] = useTransition();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,11 +58,25 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
     return userName.substring(0, 2).toUpperCase();
   };
 
+  // Password strength calculation
+  const passwordStrength = useMemo(() => {
+    if (!newPassword) return { score: 0, label: "Empty", color: "bg-zinc-200 dark:bg-zinc-800" };
+    let score = 0;
+    if (newPassword.length >= 6) score++;
+    if (newPassword.length >= 10) score++;
+    if (/[0-9]/.test(newPassword)) score++;
+    if (/[^A-Za-z0-9]/.test(newPassword)) score++;
+
+    if (score <= 1) return { score: 1, label: "Weak", color: "bg-red-500", text: "text-red-500" };
+    if (score === 2) return { score: 2, label: "Fair", color: "bg-amber-500", text: "text-amber-500" };
+    if (score === 3) return { score: 3, label: "Good", color: "bg-blue-500", text: "text-blue-500" };
+    return { score: 4, label: "Strong", color: "bg-emerald-500", text: "text-emerald-500" };
+  }, [newPassword]);
+
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check size limit (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size must be less than 5MB");
       return;
@@ -70,7 +90,7 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
       const res = await uploadImageAction(formData);
       if (res.success && res.url) {
         setProfileImage(res.url);
-        toast.success("Avatar uploaded! Save changes to apply.");
+        toast.success("Avatar uploaded! Click 'Save Changes' to apply.");
       } else {
         toast.error(res.message || "Failed to upload image");
       }
@@ -125,9 +145,7 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
     startPasswordTransition(async () => {
       const res = await changePasswordAction({
         oldPassword,
-        currentPassword: oldPassword,
         newPassword,
-        confirmPassword,
       });
 
       if (res.success) {
@@ -142,24 +160,22 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-background min-h-screen">
+    <div className="flex-1 flex flex-col bg-background min-h-full">
       <PageHeader
         breadcrumbs={["DASHBOARD", "PROFILE"]}
-        title="Admin Profile"
-        description="Manage your personal details, credentials and security settings."
+        title="Profile"
+        description="Manage your account information and password."
       />
 
-      <div className="px-4 md:px-8 pb-12 max-w-5xl w-full">
-        {/* Profile Card Header */}
-        <div className="bg-card border border-border/80 rounded-2xl p-6 md:p-8 shadow-xs mb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
-
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
-            {/* Avatar with upload button */}
-            <div className="relative group shrink-0">
-              <Avatar className="w-24 h-24 sm:w-28 sm:h-28 ring-4 ring-primary/20 shadow-md">
+      <div className="px-4 md:px-8 pb-8 flex-1 space-y-5">
+        {/* Simple & Clean Profile Card */}
+        <div className="bg-card border border-border/80 rounded-2xl p-4 sm:p-5 shadow-xs">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 text-center sm:text-left">
+            {/* Avatar with clean upload trigger */}
+            <div className="relative shrink-0">
+              <Avatar className="w-16 h-16 sm:w-18 sm:h-18 rounded-full border border-border/80">
                 <AvatarImage src={profileImage || ""} className="object-cover" />
-                <AvatarFallback className="text-2xl font-bold bg-zinc-900 text-white">
+                <AvatarFallback className="text-lg font-bold bg-muted text-foreground">
                   {getInitials(user?.name || "Admin")}
                 </AvatarFallback>
               </Avatar>
@@ -168,13 +184,14 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                title="Change Avatar"
-                className="absolute bottom-1 right-1 p-2 bg-primary text-primary-foreground rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                title="Change photo"
+                className="absolute bottom-0 right-0 p-1.5 bg-primary text-black rounded-full shadow-xs hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 border-2 border-card"
+                aria-label="Change photo"
               >
                 {isUploading ? (
-                  <Loading03Icon className="w-4 h-4 animate-spin" />
+                  <Loading03Icon className="w-3 h-3 animate-spin" />
                 ) : (
-                  <Camera01Icon className="w-4 h-4" />
+                  <Camera01Icon className="w-3 h-3" />
                 )}
               </button>
               <input
@@ -186,119 +203,120 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
               />
             </div>
 
-            {/* User basic info badge */}
-            <div className="flex-1 text-center sm:text-left min-w-0">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-1">
-                <h2 className="text-2xl font-bold text-foreground truncate">
-                  {user?.name || "Admin User"}
+            {/* Profile Info */}
+            <div className="flex-1 space-y-1">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                  {user?.name || "Admin"}
                 </h2>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  <CheckmarkCircle01Icon className="w-3.5 h-3.5" />
-                  {user?.isActive !== false ? "Active" : "Inactive"}
-                </span>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/20 text-foreground border border-primary/30">
-                  {user?.role?.replace("_", " ") || "SUPER ADMIN"}
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-foreground border border-border/80">
+                  <Shield02Icon className="w-3 h-3 text-primary" />
+                  {user?.role?.replace("_", " ") || "Super Admin"}
                 </span>
               </div>
-
-              <p className="text-muted-foreground text-sm flex items-center justify-center sm:justify-start gap-2 mb-3">
-                <Mail01Icon className="w-4 h-4 text-muted-foreground/70" />
+              <p className="text-sm text-muted-foreground">
                 {user?.email || "admin@example.com"}
               </p>
-
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <SecurityCheckIcon className="w-4 h-4 text-primary" />
-                  <span>Account Verified: {user?.isVerified ? "Yes" : "Verified"}</span>
-                </div>
-                {user?.phone && (
-                  <div className="flex items-center gap-1.5">
-                    <CallIcon className="w-4 h-4 text-primary" />
-                    <span>{user.phone}</span>
-                  </div>
-                )}
-              </div>
+              {user?.phone && (
+                <p className="text-xs text-muted-foreground flex items-center justify-center sm:justify-start gap-1 pt-0.5">
+                  <CallIcon className="w-3.5 h-3.5" />
+                  <span>{user.phone}</span>
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Personal Info Form */}
-          <div className="bg-card border border-border/80 rounded-2xl p-6 md:p-8 shadow-xs">
-            <div className="flex items-center gap-3 pb-5 border-b border-border/60 mb-6">
-              <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+        {/* 2 Columns: Personal Information & Password */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+          {/* Left Column: Personal Details Card */}
+          <div className="bg-card border border-border/80 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col h-full">
+            <div className="flex items-center gap-3 pb-4 border-b border-border/60 mb-5">
+              <div className="p-2 rounded-xl bg-primary/10 text-primary">
                 <UserIcon className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">Personal Information</h3>
-                <p className="text-xs text-muted-foreground">Update your personal profile details</p>
+                <h3 className="text-base font-bold text-foreground">Personal Information</h3>
+                <p className="text-xs text-muted-foreground">Update your personal details</p>
               </div>
             </div>
 
-            <form onSubmit={handleSaveProfile} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Full Name
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="fullName"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                    className="h-11 bg-background"
-                    required
-                  />
+            <form onSubmit={handleSaveProfile} className="flex-1 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="fullName" className="text-xs font-medium text-foreground">
+                    Full Name
+                  </Label>
+                  <div className="relative">
+                    <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="fullName"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Your name"
+                      className="pl-10 h-10 bg-background border-border shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary rounded-md transition-colors text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-xs font-medium text-foreground">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail01Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="email"
+                      value={user?.email || ""}
+                      disabled
+                      className="pl-10 h-10 bg-muted/40 border-border/60 cursor-not-allowed text-muted-foreground rounded-md text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="phone" className="text-xs font-medium text-foreground">
+                    Phone Number
+                  </Label>
+                  <div className="relative">
+                    <CallIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+1 (555) 000-0000"
+                      className="pl-10 h-10 bg-background border-border shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary rounded-md transition-colors text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="role" className="text-xs font-medium text-foreground">
+                    Role
+                  </Label>
+                  <div className="relative">
+                    <Shield02Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="role"
+                      value={user?.role?.replace("_", " ") || "SUPER ADMIN"}
+                      disabled
+                      className="pl-10 h-10 bg-muted/40 border-border/60 cursor-not-allowed text-muted-foreground uppercase font-medium rounded-md text-sm"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Email Address (Read-only)
-                </Label>
-                <Input
-                  id="email"
-                  value={user?.email || ""}
-                  disabled
-                  className="h-11 bg-muted/40 cursor-not-allowed text-muted-foreground"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Phone Number
-                </Label>
-                <Input
-                  id="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+1 (555) 000-0000"
-                  className="h-11 bg-background"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="role" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Role
-                </Label>
-                <Input
-                  id="role"
-                  value={user?.role?.replace("_", " ") || "SUPER ADMIN"}
-                  disabled
-                  className="h-11 bg-muted/40 cursor-not-allowed text-muted-foreground uppercase"
-                />
-              </div>
-
-              <div className="pt-2 flex justify-end">
+              <div className="pt-6 mt-auto flex justify-end">
                 <Button
                   type="submit"
                   disabled={isSavingProfile}
-                  className="h-11 px-6 font-semibold shadow-xs"
+                  className="h-10 px-6 font-semibold bg-primary hover:bg-primary/90 text-primary-foreground rounded-md transition-all cursor-pointer"
                 >
                   {isSavingProfile ? (
                     <>
                       <Loading03Icon className="w-4 h-4 mr-2 animate-spin" />
-                      Saving Changes...
+                      Saving...
                     </>
                   ) : (
                     "Save Changes"
@@ -308,88 +326,156 @@ export default function ProfileClient({ initialUser }: ProfileClientProps) {
             </form>
           </div>
 
-          {/* Change Password Form */}
-          <div className="bg-card border border-border/80 rounded-2xl p-6 md:p-8 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-3 pb-5 border-b border-border/60 mb-6">
-                <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
-                  <LockPasswordIcon className="w-5 h-5 text-foreground" />
+          {/* Right Column: Password Card */}
+          <div className="bg-card border border-border/80 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col h-full">
+            <div className="flex items-center gap-3 pb-4 border-b border-border/60 mb-5">
+              <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                <LockPasswordIcon className="w-5 h-5 text-foreground" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-foreground">Change Password</h3>
+                <p className="text-xs text-muted-foreground">Update your login password</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleChangePassword} className="flex-1 flex flex-col justify-between">
+              <div className="space-y-4">
+                {/* Current Password */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="currentPassword" className="text-xs font-medium text-foreground">
+                    Current Password
+                  </Label>
+                  <div className="relative">
+                    <Key01Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="currentPassword"
+                      type={showOldPassword ? "text" : "password"}
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="pl-10 pr-10 h-10 bg-background border-border shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary rounded-md transition-colors text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowOldPassword((prev) => !prev)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                      title={showOldPassword ? "Hide password" : "Show password"}
+                    >
+                      {showOldPassword ? (
+                        <ViewOffSlashIcon className="w-4 h-4" />
+                      ) : (
+                        <ViewIcon className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">Security & Password</h3>
-                  <p className="text-xs text-muted-foreground">Ensure your account uses a strong password</p>
+
+                {/* New Password */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="newPassword" className="text-xs font-medium text-foreground">
+                    New Password
+                  </Label>
+                  <div className="relative">
+                    <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="newPassword"
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="At least 6 characters"
+                      className="pl-10 pr-10 h-10 bg-background border-border shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary rounded-md transition-colors text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword((prev) => !prev)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                      title={showNewPassword ? "Hide password" : "Show password"}
+                    >
+                      {showNewPassword ? (
+                        <ViewOffSlashIcon className="w-4 h-4" />
+                      ) : (
+                        <ViewIcon className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Password Strength Meter */}
+                  {newPassword && (
+                    <div className="space-y-1 pt-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-muted-foreground">Strength:</span>
+                        <span className={`font-semibold ${passwordStrength.text}`}>
+                          {passwordStrength.label}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-1.5 h-1 w-full">
+                        {[1, 2, 3, 4].map((step) => (
+                          <div
+                            key={step}
+                            className={`h-full rounded-full transition-all duration-300 ${
+                              passwordStrength.score >= step
+                                ? passwordStrength.color
+                                : "bg-muted"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="confirmPassword" className="text-xs font-medium text-foreground">
+                    Confirm New Password
+                  </Label>
+                  <div className="relative">
+                    <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/80 pointer-events-none" />
+                    <Input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Re-enter new password"
+                      className="pl-10 pr-10 h-10 bg-background border-border shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary rounded-md transition-colors text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                      title={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? (
+                        <ViewOffSlashIcon className="w-4 h-4" />
+                      ) : (
+                        <ViewIcon className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <form onSubmit={handleChangePassword} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Current Password
-                  </Label>
-                  <Input
-                    id="currentPassword"
-                    type="password"
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="h-11 bg-background"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    New Password
-                  </Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="At least 6 characters"
-                    className="h-11 bg-background"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Confirm New Password
-                  </Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="h-11 bg-background"
-                    required
-                  />
-                </div>
-
-                <div className="pt-2 flex justify-end">
-                  <Button
-                    type="submit"
-                    disabled={isChangingPassword}
-                    variant="outline"
-                    className="h-11 px-6 font-semibold border-border hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                  >
-                    {isChangingPassword ? (
-                      <>
-                        <Loading03Icon className="w-4 h-4 mr-2 animate-spin" />
-                        Updating...
-                      </>
-                    ) : (
-                      "Update Password"
-                    )}
-                  </Button>
-                </div>
-              </form>
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-border/60 text-xs text-muted-foreground">
-              <p>💡 Tip: Use a combination of uppercase letters, numbers, and symbols to ensure maximum safety.</p>
-            </div>
+              <div className="pt-6 mt-auto flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={isChangingPassword}
+                  variant="outline"
+                  className="w-full sm:w-auto h-10 px-6 font-semibold border-border hover:bg-secondary cursor-pointer rounded-md"
+                >
+                  {isChangingPassword ? (
+                    <>
+                      <Loading03Icon className="w-4 h-4 mr-2 animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Password"
+                  )}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

@@ -22,12 +22,22 @@ export default function ReviewsPage() {
 
   return (
     <main className="flex-1 flex flex-col relative overflow-hidden">
-      {/* Background Image / Blur */}
+      {/* Background Image / Cinematic Overlays */}
       <div 
-        className="absolute top-0 left-0 w-full h-[600px] z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+        className="absolute top-0 left-0 w-full h-[650px] z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
         style={{ backgroundImage: "url('/review-page-image.svg')" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
+        {/* Base dark tint for readability */}
+        <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
+
+        {/* Top Vignette for Navbar contrast */}
+        <div className="absolute top-0 inset-x-0 h-36 bg-gradient-to-b from-background/90 via-background/40 to-transparent" />
+
+        {/* Bottom Seamless Fade into the page background */}
+        <div className="absolute bottom-0 inset-x-0 h-52 bg-gradient-to-t from-background via-background/80 to-transparent" />
+
+        {/* Ambient Gold Glow behind Title */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[350px] bg-primary/10 rounded-full blur-[130px] pointer-events-none" />
       </div>
 
       <Navbar />

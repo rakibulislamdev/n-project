@@ -44,13 +44,15 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-background font-inter">
+    <div className="flex flex-col md:flex-row h-screen h-dvh overflow-hidden bg-background font-inter">
       <ReviewsStoreInitializer pending={pendingData} approved={approvedData} />
       <Sidebar />
-      <MobileTopbar />
-      <main className="flex-1 bg-zinc-50/60 dark:bg-[#0E0E0E] overflow-y-auto">
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        <MobileTopbar />
+        <main className="flex-1 min-w-0 h-full bg-zinc-50/60 dark:bg-[#0E0E0E] overflow-y-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

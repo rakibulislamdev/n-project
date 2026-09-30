@@ -22,7 +22,7 @@ export function ReviewSummary({ averageRating = 0, totalReviews = 0 }: ReviewSum
     <ScrollSection 
       y={30}
       duration={0.6}
-      className="w-full bg-background border-y border-border/50 py-10 md:py-12"
+      className="w-full bg-background py-10 md:py-12"
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-8">
         {/* Left Side: Rating */}

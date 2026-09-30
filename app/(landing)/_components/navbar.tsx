@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { X } from "lucide-react";
+import { Cancel01Icon } from "hugeicons-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -71,7 +71,7 @@ export function Navbar() {
           aria-label="Toggle Menu"
         >
           {isMobileMenuOpen ? (
-            <X size={24} />
+            <Cancel01Icon className="w-6 h-6" />
           ) : (
             <svg
               width="24"
@@ -115,7 +115,7 @@ export function Navbar() {
                   className="p-2 -mr-2 text-foreground"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <X size={24} />
+                  <Cancel01Icon className="w-6 h-6" />
                 </button>
               </div>
               <div className="flex flex-col p-6 gap-5">

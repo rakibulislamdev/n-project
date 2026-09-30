@@ -140,27 +140,43 @@ export async function updateProfileAction(formData: { name?: string; phone?: str
       return { success: false, message: "Unauthorized. Please log in again." };
     }
 
-    const response = await fetch(`${baseUrl}/auth/update-profile`, {
+    const payload: Record<string, any> = {};
+    if (formData.name !== undefined) payload.name = formData.name;
+    if (formData.phone !== undefined) payload.phone = formData.phone;
+    if (formData.profileImage) payload.profileImage = formData.profileImage;
+
+    const response = await fetch(`${baseUrl}/user/me`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
-    if (response.ok && data.success) {
+    if (response.ok && data?.success) {
+      if (data.data) {
+        cookieStore.set("user", JSON.stringify(data.data), {
+          path: "/",
+        });
+      }
       return {
         success: true,
         message: data.message || "Profile updated successfully",
         data: data.data
       };
     } else {
+      let errorMsg = "Failed to update profile";
+      if (data?.message) {
+        errorMsg = Array.isArray(data.message) ? data.message.join(", ") : data.message;
+      } else if (data?.error) {
+        errorMsg = typeof data.error === "string" ? data.error : data.error?.message || errorMsg;
+      }
       return {
         success: false,
-        message: data.message || "Failed to update profile"
+        message: errorMsg
       };
     }
   } catch (error) {
@@ -172,7 +188,7 @@ export async function updateProfileAction(formData: { name?: string; phone?: str
   }
 }
 
-export async function changePasswordAction(payload: { oldPassword?: string; currentPassword?: string; newPassword?: string; confirmPassword?: string }) {
+export async function changePasswordAction(payload: { oldPassword?: string; currentPassword?: string; newPassword?: string }) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const cookieStore = await cookies();
@@ -182,26 +198,42 @@ export async function changePasswordAction(payload: { oldPassword?: string; curr
       return { success: false, message: "Unauthorized. Please log in again." };
     }
 
+    const oldPassword = payload.oldPassword || payload.currentPassword;
+    const newPassword = payload.newPassword;
+
+    if (!oldPassword || !newPassword) {
+      return { success: false, message: "Both current password and new password are required." };
+    }
+
     const response = await fetch(`${baseUrl}/auth/change-password`, {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        oldPassword,
+        newPassword
+      })
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
-    if (response.ok && data.success) {
+    if (response.ok && data?.success) {
       return {
         success: true,
         message: data.message || "Password changed successfully"
       };
     } else {
+      let errorMsg = "Failed to change password";
+      if (data?.message) {
+        errorMsg = Array.isArray(data.message) ? data.message.join(", ") : data.message;
+      } else if (data?.error) {
+        errorMsg = typeof data.error === "string" ? data.error : data.error?.message || errorMsg;
+      }
       return {
         success: false,
-        message: data.message || "Failed to change password"
+        message: errorMsg
       };
     }
   } catch (error) {

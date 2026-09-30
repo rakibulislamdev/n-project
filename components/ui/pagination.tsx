@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
+import { ArrowLeft01Icon, ArrowRight01Icon, MoreHorizontalIcon } from "hugeicons-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -46,7 +46,7 @@ function PaginationLink({
 }: PaginationLinkProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
+      variant={isActive ? "default" : "ghost"}
       size={size}
       className={cn(className)}
       nativeButton={false}
@@ -71,10 +71,10 @@ function PaginationPrevious({
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("pl-1.5!", className)}
+      className={cn("pl-2!", className)}
       {...props}
     >
-      <ChevronLeftIcon data-icon="inline-start" />
+      <ArrowLeft01Icon className="w-4 h-4" data-icon="inline-start" />
       <span className="hidden sm:block">{text}</span>
     </PaginationLink>
   )
@@ -89,11 +89,11 @@ function PaginationNext({
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("pr-1.5!", className)}
+      className={cn("pr-2!", className)}
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
-      <ChevronRightIcon data-icon="inline-end" />
+      <ArrowRight01Icon className="w-4 h-4" data-icon="inline-end" />
     </PaginationLink>
   )
 }
@@ -112,8 +112,7 @@ function PaginationEllipsis({
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
+      <MoreHorizontalIcon className="w-4 h-4" />
       <span className="sr-only">More pages</span>
     </span>
   )

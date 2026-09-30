@@ -125,7 +125,7 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-white text-zinc-900 min-h-screen">
+    <div className="flex-1 flex flex-col bg-transparent text-foreground min-h-full">
       <PageHeader
         breadcrumbs={["REVIEWS", "PENDING REVIEWS"]}
         title="Pending Reviews"
@@ -184,7 +184,7 @@ export default function PendingReviewsClient({ initialReviews }: PendingReviewsC
                 }
               }}
               disabled={isLoading}
-              className="bg-red-500 hover:bg-red-600 text-white"
+              className="!bg-red-600 hover:!bg-red-700 !text-white font-semibold cursor-pointer shadow-sm"
             >
               {isLoading ? "Rejecting..." : "Reject"}
             </Button>
