@@ -36,7 +36,9 @@ export function Navbar() {
   return (
     <header className="absolute top-0 w-full z-50 py-6 font-inter">
       <div className="max-w-7xl mx-auto px-5 md:px-8 w-full flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">Logo</Link>
+        <Link href="/" className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">
+          NDA<span className="text-primary">Estates</span>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
@@ -110,7 +112,9 @@ export function Navbar() {
               className="fixed top-0 left-0 h-full w-[80%] max-w-sm bg-background border-r border-border/50 z-50 lg:hidden flex flex-col shadow-2xl"
             >
               <div className="flex items-center justify-between p-6 border-b border-border/50">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold tracking-tight">Logo</Link>
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold tracking-tight">
+                  NDA<span className="text-primary">Estates</span>
+                </Link>
                 <button
                   className="p-2 -mr-2 text-foreground"
                   onClick={() => setIsMobileMenuOpen(false)}

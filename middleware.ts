@@ -25,8 +25,8 @@ export function middleware(request: NextRequest) {
   const isAuthenticated = Boolean(token || user);
   const isAdmin = Boolean(user && isAdminRole(user.role));
 
-  // 1. If already logged in, prevent visiting login/signup
-  if (pathname === '/login' || pathname === '/signup') {
+  // 1. If already logged in, prevent visiting login
+  if (pathname === '/login') {
     if (isAuthenticated) {
       // If admin, go to dashboard. If normal user, go to home.
       const destination = isAdmin ? '/dashboard' : '/';
@@ -55,5 +55,5 @@ export function middleware(request: NextRequest) {
 
 // Matching Paths
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup'],
+  matcher: ['/dashboard/:path*', '/login'],
 };

@@ -108,9 +108,9 @@ export function Sidebar() {
               isExpanded ? "opacity-100 w-[160px]" : "opacity-0 w-0 pointer-events-none"
             }`}
           >
-            <Home09Icon className="w-7 h-7 text-orange-500 shrink-0" />
-            <span className="text-white font-bold text-[16px] tracking-wide whitespace-nowrap">
-              RealEstate
+            <Home09Icon className="w-6 h-6 text-primary shrink-0" />
+            <span className="text-white font-bold text-[15px] tracking-wide whitespace-nowrap">
+              NDA<span className="text-primary">Estates</span>
             </span>
           </Link>
 

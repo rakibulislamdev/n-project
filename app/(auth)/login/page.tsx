@@ -22,10 +22,10 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-sm border border-zinc-100">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900">Welcome Back</h1>
-        <p className="text-zinc-500 mt-2 text-sm">Sign in to your account</p>
+    <div className="w-full max-w-md p-6 sm:p-8 bg-card text-card-foreground rounded-2xl shadow-xl border border-border transition-colors">
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">Welcome Back</h1>
+        <p className="text-muted-foreground mt-2 text-sm">Sign in to your admin account</p>
       </div>
       
       <LoginForm />

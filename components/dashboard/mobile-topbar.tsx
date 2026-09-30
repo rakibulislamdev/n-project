@@ -10,8 +10,10 @@ export function MobileTopbar() {
   return (
     <div className="flex md:hidden items-center justify-between h-16 px-4 bg-[#121212] border-b border-zinc-800 shrink-0 sticky top-0 z-40">
       <Link href="/" className="flex items-center gap-3">
-        <Home09Icon className="w-6 h-6 text-orange-500" />
-        <span className="text-white font-bold text-[15px] tracking-wide">RealEstate</span>
+        <Home09Icon className="w-6 h-6 text-primary" />
+        <span className="text-white font-bold text-[15px] tracking-wide">
+          NDA<span className="text-primary">Estates</span>
+        </span>
       </Link>
 
       <button

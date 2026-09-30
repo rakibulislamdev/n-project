@@ -60,7 +60,7 @@ export function Footer() {
           margin="0px"
           className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground pt-4"
         >
-          <p>© {new Date().getFullYear()} Nader Ayoub. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} NDAEstates. All rights reserved.</p>
           <div className="flex items-center gap-5 text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors"><FacebookIcon className="w-4 h-4" /></a>
             <a href="#" className="hover:text-foreground transition-colors"><InstagramIcon className="w-4 h-4" /></a>

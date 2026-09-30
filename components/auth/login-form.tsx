@@ -64,12 +64,12 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-700 font-semibold">Email</FormLabel>
+              <FormLabel className="text-xs sm:text-sm font-semibold text-foreground">Email</FormLabel>
               <FormControl>
                 <Input 
                   type="email" 
                   placeholder="john@example.com" 
-                  className="h-11 rounded-md bg-zinc-50 border-zinc-200 focus-visible:ring-black focus-visible:ring-offset-0 px-4"
+                  className="h-11 rounded-md bg-background dark:bg-zinc-950/70 border-border dark:border-zinc-800 shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-foreground placeholder:text-muted-foreground px-4 transition-colors text-sm"
                   {...field} 
                 />
               </FormControl>
@@ -83,19 +83,20 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-700 font-semibold">Password</FormLabel>
+              <FormLabel className="text-xs sm:text-sm font-semibold text-foreground">Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input 
                     type={showPassword ? "text" : "password"} 
                     placeholder="Enter your password" 
-                    className="h-11 rounded-md bg-zinc-50 border-zinc-200 focus-visible:ring-black focus-visible:ring-offset-0 px-4 pr-10"
+                    className="h-11 rounded-md bg-background dark:bg-zinc-950/70 border-border dark:border-zinc-800 shadow-xs hover:border-border/80 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-foreground placeholder:text-muted-foreground px-4 pr-10 transition-colors text-sm"
                     {...field} 
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-700"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors p-1"
+                    title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
                       <ViewOffIcon className="h-5 w-5" />
@@ -120,18 +121,18 @@ export function LoginForm() {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-zinc-300 data-[state=checked]:bg-black data-[state=checked]:border-black"
+                    className="border-border data-[state=checked]:bg-primary data-[state=checked]:text-zinc-950 data-[state=checked]:border-primary"
                   />
                 </FormControl>
                 <div className="leading-none flex items-center pt-0.5">
-                  <FormLabel className="text-sm font-medium text-zinc-700 cursor-pointer">
+                  <FormLabel className="text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer select-none transition-colors">
                     Remember me
                   </FormLabel>
                 </div>
               </FormItem>
             )}
           />
-          <a href="#" className="text-sm font-semibold text-black hover:underline">
+          <a href="#" className="text-sm font-medium text-primary hover:underline cursor-pointer transition-colors">
             Forgot password?
           </a>
         </div>
@@ -139,10 +140,10 @@ export function LoginForm() {
         <Button 
           type="submit" 
           disabled={form.formState.isSubmitting}
-          className="h-12 bg-black text-white hover:bg-zinc-800 rounded-md font-bold w-full mt-2"
+          className="h-11 sm:h-12 bg-primary hover:bg-primary/90 text-zinc-950 font-bold rounded-md w-full mt-2 cursor-pointer shadow-md hover:shadow-lg transition-all text-sm sm:text-base disabled:opacity-50"
         >
           {form.formState.isSubmitting ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
           ) : (
             "Sign In"
           )}

@@ -17,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "N-Real Estate",
-  description: "Find your dream home with us",
+  title: "NDAEstates",
+  description: "Find your dream home with NDAEstates",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
